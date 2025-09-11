@@ -1,9 +1,20 @@
 "use client";
+import PathCard from "@/components/cards_tags/PathCard";
 import Tag from "@/components/cards_tags/Tag";
 import { revealSpanVariant, shimmerSpanVariant } from "@/variants/buttonVariants";
 import { revealFromBottom } from "@/variants/TextVariants";
-import { ArrowRight, Pointer, Star } from "lucide-react";
-import { hover, motion } from "motion/react";
+import {
+  ArrowRight,
+  GalleryVerticalEnd,
+  Gauge,
+  Hand,
+  Loader,
+  MonitorX,
+  Pointer,
+  Sparkles,
+  Star,
+} from "lucide-react";
+import { motion } from "motion/react";
 
 export default function Home() {
   return (
@@ -30,7 +41,7 @@ export default function Home() {
               >
                 Previously Framer Motion
               </motion.span>
-              <Pointer className="text-foreground inline-block absolute -bottom-3 -right-3 -rotate-25" />
+              <Pointer className="text-foreground inline-block absolute -bottom-3 -right-3 -rotate-25 bounce-up" />
             </motion.span>{" "}
             like a <span className="text-gradient">Pro</span>
           </h2>
@@ -67,7 +78,7 @@ export default function Home() {
               Learn More
               <motion.span
                 variants={shimmerSpanVariant}
-                className="pointer-events-none"
+                className="shimmer-element white-shimmer"
               ></motion.span>
             </motion.button>
           </div>
@@ -78,10 +89,61 @@ export default function Home() {
       <section id="why-motion" aria-labelledby="why-motion-title" className="py-18 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h4 className="text-4xl font-bold text-foreground mb-2">Why Motion for React?</h4>
-            <p className="paragraph text-base">
-              Each path is designed to build your expertise step by step
+            <h4 className="text-4xl font-bold text-foreground font-display mb-2">
+              Why <span className="text-gradient ">Motion </span>for React?
+            </h4>
+            <p className="text-gradient text-base mx-auto">
+              Animations should feel like part of your app, not an afterthought.
             </p>
+            <div className="max-w-5xl mx-auto mt-10 grid grid-cols-[2fr_1fr] gap-18">
+              <p className="text-foreground/80 text-base text-left ">
+                React empowers you to build dynamic, data-driven interfaces — but making them feel
+                alive with smooth, performant animations is often tricky. <br />
+                Motion solves that problem. <br />
+                It’s a production-ready animation library built for React, giving you the tools to
+                craft everything from elegant micro-interactions to immersive, gesture-driven
+                experiences.
+                <br />
+                With a simple{" "}
+                <code className="bg-gray-700 text-accent/90 px-2 py-1 text-xs rounded-md font-mono">
+                  {"<motion.div>"}
+                </code>{" "}
+                you can declare what your UI should look like, and Motion takes care of the journey
+                to get there. No imperative “move this box here” logic, just clean and expressive
+                code.
+                <br />
+                Whether you’re a beginner looking to add some flair to your projects or an
+                experienced developer aiming to create polished, app-like experiences, Motion
+                provides a frictionless way to bring your React applications to life.
+              </p>
+              <div className="flex flex-col justify-center gap-6 items-stretch relative">
+                <Tag
+                  text="Built for React"
+                  className="justify-center py-2.5 "
+                  icon={Star}
+                  preview="While other animation libraries are messy to integrate, Motion's declarative API feels like a natural extension of React"
+                />
+                <Tag
+                  text="Hardware-acceleration"
+                  className="justify-center py-2.5 "
+                  icon={Star}
+                  preview="Motion leverages the same high-performance browser animations as pure CSS,"
+                />
+                <Tag
+                  text="Animate anything"
+                  className="justify-center py-2.5 "
+                  icon={Star}
+                  preview="CSS has limits — some values can’t animate. Motion fixes this with one consistent API for everything."
+                />
+                <Tag
+                  text="App-like gestures"
+                  className="justify-center py-2.5"
+                  icon={Star}
+                  preview="Motion provides robust, cross-device gesture recognisers for tap, drag, and hover"
+                />
+                <Pointer className="absolute -top-5 -right-5 -rotate-125 bounce-up" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -90,14 +152,58 @@ export default function Home() {
       <section
         id="learning-path"
         aria-labelledby="learning-path-title"
-        className="relative py-20 px-6"
+        className="relative py-18 px-6"
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h4 className="text-4xl font-bold text-foreground mb-2">Choose Your Learning Path</h4>
-            <p className="paragraph text-base">
+            <p className="text-gradient text-base mx-auto">
               Each path is designed to build your expertise step by step
             </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <PathCard
+              icon={Sparkles}
+              title="Animations Basics"
+              description="Master x, y, scale, rotate and many more available transformations in Motion with precision."
+              link="/learn"
+              accentColor="#B20650"
+            />
+            <PathCard
+              icon={MonitorX}
+              title="Animate Presence"
+              description="Learn how to animate components as they mount and unmount in React with AnimatePresence."
+              link="/learn"
+              accentColor="#2CA060"
+            />
+            <PathCard
+              icon={GalleryVerticalEnd}
+              title="Layout Animations"
+              description="Discover what layout animations are and how to implement them effectively."
+              link="/learn"
+              accentColor="#215E97"
+            />
+            <PathCard
+              icon={Hand}
+              title="Gestures & Drag"
+              description="Implement intuitive drag-and-drop interfaces and gesture-based interactions that enhance user engagement."
+              link="/learn"
+              accentColor="#450D82"
+            />
+            <PathCard
+              icon={Loader}
+              title="Advanced Animations"
+              description="Dive into advanced animation techniques, including keyframes, custom easing, and orchestrating complex sequences."
+              link="/learn"
+              accentColor="#136F63"
+            />
+            <PathCard
+              icon={Gauge}
+              title="Performance Optimization"
+              description="Learn strategies to ensure your animations run smoothly across all devices, focusing on performance best practices."
+              link="/learn"
+              accentColor="#C20114"
+            />
           </div>
         </div>
       </section>

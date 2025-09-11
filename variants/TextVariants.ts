@@ -5,4 +5,8 @@ const revealFromBottom: Variants = {
   hidden: { opacity: 0, y: -10, transition: { type: "tween", duration: 0.5 } },
   hovered: { opacity: 1, y: -20, transition: { type: "tween", duration: 0.5 } },
 };
-export { revealFromBottom };
+const revealToBottom: Variants = {
+  hidden: { opacity: 0, y: -10, scale: 0.8, transition: { type: "tween", duration: 0.5 } },
+  hovered: { opacity: 1, y: 5, scale: 1, transition: { type: "tween", duration: 0.5 } },
+};
+export { revealFromBottom, revealToBottom };

@@ -8,18 +8,20 @@
   --color-primary-100: #1a8cbc;
   --color-secondary-100: #76c9e5;
   --color-accent-100: #dac107;
-}
 
-@theme inline {
-  --color-background: var(--color-bg);
-  --color-foreground: var(--color-text);
-  --color-background-muted: var(--color-bg-muted);
-  --color-primary: var(--color-primary-100);
-  --color-secondary: var(--color-secondary-100);
-  --color-accent: var(--color-accent-100);
-  --font-sans: var(--font-anek-malayalam), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-days-one), ui-sans-serif, system-ui, sans-serif;
-  --font-brand: var(--font-reem-kufi-ink), ui-sans-serif, system-ui, sans-serif;
+  @theme inline {
+    --color-background: var(--color-bg);
+    --color-foreground: var(--color-text);
+    --color-background-muted: var(--color-bg-muted);
+    --color-primary: var(--color-primary-100);
+    --color-secondary: var(--color-secondary-100);
+    --color-accent: var(--color-accent-100);
+    --font-sans: var(--font-anek-malayalam), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-days-one), ui-sans-serif, system-ui, sans-serif;
+    --font-brand: var(--font-reem-kufi-ink), ui-sans-serif, system-ui, sans-serif;
+    --animate-bounce-right: bounce-right 1.5s infinite;
+    --animate-bounce-up: bounce-up 1.5s infinite;
+  }
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -41,6 +43,29 @@ body {
 @utility text-gradient {
   @apply bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent w-fit;
 }
+@utility wrap-pretty {
+  text-wrap: pretty;
+}
+@utility shimmer-element {
+  @apply pointer-events-none  absolute top-0 w-full h-full;
+}
+@utility white-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+@utility white-shimmer-light {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
 @layer components {
   *:focus {
     @apply outline-none ring-2 ring-accent;
@@ -69,6 +94,16 @@ body {
   .primary-button {
     @apply border-none px-5 py-3 text-lg bg-gradient-to-r from-primary to-accent text-background rounded-xl transition-all cursor-pointer whitespace-nowrap transform hover:scale-105 focus:scale-105;
   }
+  .accent-button {
+    @apply border-none text-foreground text-lg rounded-xl cursor-pointer whitespace-nowrap transition-colors border-transparent;
+    background-color: var(--accent-color);
+  }
+  .accent-button:hover {
+    background-color: color-mix(in srgb, var(--accent-color) 80%, transparent);
+    box-shadow: inset 0 0 25px var(--color-background);
+    border: 2px solid var(--accent-color);
+  }
+
   .button-outline {
     @apply border-2 border-foreground/70 text-foreground px-5 py-3 rounded-xl cursor-pointer whitespace-nowrap transform hover:scale-105 transition-all focus:border-accent;
   }

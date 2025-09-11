@@ -4,17 +4,25 @@ import { Variants } from "motion";
 
 const shimmerSpanVariant: Variants = {
   rest: {
-    position: "absolute",
-    // Initial position off-screen to the left
     left: "-100%",
-    top: 0,
-    width: "100%",
-    height: "100%",
     // Shimmer effect
-    background:
-      "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%)",
     transform: "skewX(-20deg)",
     transition: { type: "spring", stiffness: 100 },
+  },
+  hovered: {
+    // Move to off-screen right
+    left: "100%",
+    transform: "skewX(-20deg)",
+    transition: { type: "tween", duration: 1 },
+  },
+};
+const QuickShimmer: Variants = {
+  rest: {
+    left: "-100%",
+    width: "100%",
+    height: "100%",
+    transform: "skewX(-20deg)",
+    transition: { type: "spring", stiffness: 100, damping: 20 },
   },
   hovered: {
     position: "absolute",
@@ -23,10 +31,8 @@ const shimmerSpanVariant: Variants = {
     top: 0,
     width: "100%",
     height: "100%",
-    background:
-      "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%)",
     transform: "skewX(-20deg)",
-    transition: { type: "tween", duration: 1 },
+    transition: { type: "spring", stiffness: 100, damping: 20 },
   },
 };
 const revealSpanVariant: Variants = {
@@ -42,4 +48,4 @@ const revealSpanVariant: Variants = {
   },
 };
 
-export { shimmerSpanVariant, revealSpanVariant };
+export { shimmerSpanVariant, revealSpanVariant, QuickShimmer };
