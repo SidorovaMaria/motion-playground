@@ -1,3 +1,107 @@
+"use client";
+import Tag from "@/components/cards_tags/Tag";
+import { revealSpanVariant, shimmerSpanVariant } from "@/variants/buttonVariants";
+import { revealFromBottom } from "@/variants/TextVariants";
+import { ArrowRight, Pointer, Star } from "lucide-react";
+import { hover, motion } from "motion/react";
+
 export default function Home() {
-  return <></>;
+  return (
+    <main>
+      {/* Hero Section */}
+      <section id="hero" aria-labelledby="hero-title" className="relative py-18 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Motion Tag */}
+          <Tag icon={Star} text="The Ultimate React Motion Learning Experience" className="mb-12" />
+          <h2
+            id="hero-title"
+            className="text-5xl font-bold text-foreground mb-8 leading-tight font-display"
+          >
+            Master{" "}
+            <motion.span
+              initial="hidden"
+              whileHover="hovered"
+              className="text-gradient relative cursor-pointer"
+            >
+              Motion
+              <motion.span
+                variants={revealFromBottom}
+                className="text-xs absolute  left-1/2 -translate-x-1/2 bg-foreground text-background px-2 py-1 rounded-md whitespace-nowrap"
+              >
+                Previously Framer Motion
+              </motion.span>
+              <Pointer className="text-foreground inline-block absolute -bottom-3 -right-3 -rotate-25" />
+            </motion.span>{" "}
+            like a <span className="text-gradient">Pro</span>
+          </h2>
+          <p className="paragraph text-lg mb-12 max-w-3xl mx-auto">
+            Your interactive hub for learning Framer Motion with React. This site isn’t just another
+            documentation copy — it’s a playground where you can experiment, break things, and see
+            animations come to life.
+          </p>
+          {/* Buttons */}
+          <div className="flex items-center justify-center gap-8 ">
+            <motion.button
+              initial="rest"
+              whileHover="hovered"
+              whileFocus="hovered"
+              animate="rest"
+              onClick={() => {
+                const section = document.getElementById("learning-path");
+                section?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="primary-button flex items-center gap-1 overflow-hidden"
+            >
+              <p>Get Started</p>
+              <motion.span variants={revealSpanVariant} className="text-background bounce-right">
+                <ArrowRight />
+              </motion.span>
+            </motion.button>
+            <motion.button
+              initial="rest"
+              whileHover="hovered"
+              whileFocus="hovered"
+              animate="rest"
+              className="button-outline relative overflow-hidden"
+            >
+              Learn More
+              <motion.span
+                variants={shimmerSpanVariant}
+                className="pointer-events-none"
+              ></motion.span>
+            </motion.button>
+          </div>
+        </div>
+      </section>
+      {/* End of Hero Section */}
+      {/* Why Motion for React  */}
+      <section id="why-motion" aria-labelledby="why-motion-title" className="py-18 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h4 className="text-4xl font-bold text-foreground mb-2">Why Motion for React?</h4>
+            <p className="paragraph text-base">
+              Each path is designed to build your expertise step by step
+            </p>
+          </div>
+        </div>
+      </section>
+      {/* End of Why Motion for React  */}
+      {/* Learning Path Section  */}
+      <section
+        id="learning-path"
+        aria-labelledby="learning-path-title"
+        className="relative py-20 px-6"
+      >
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h4 className="text-4xl font-bold text-foreground mb-2">Choose Your Learning Path</h4>
+            <p className="paragraph text-base">
+              Each path is designed to build your expertise step by step
+            </p>
+          </div>
+        </div>
+      </section>
+      {/* End of Learning Path Section */}
+    </main>
+  );
 }

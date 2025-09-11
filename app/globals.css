@@ -43,7 +43,7 @@ body {
 }
 @layer components {
   *:focus {
-    @apply outline-none ring-2 ring-accent/80   text-foreground!;
+    @apply outline-none ring-2 ring-accent;
   }
   .heading {
     @apply text-foreground font-display font-bold text-2xl;
@@ -66,4 +66,36 @@ body {
   .hovered-link {
     @apply p-0.5 rounded-md cursor-pointer text-foreground/70 hover:text-foreground transition;
   }
+  .primary-button {
+    @apply border-none px-5 py-3 text-lg bg-gradient-to-r from-primary to-accent text-background rounded-xl transition-all cursor-pointer whitespace-nowrap transform hover:scale-105 focus:scale-105;
+  }
+  .button-outline {
+    @apply border-2 border-foreground/70 text-foreground px-5 py-3 rounded-xl cursor-pointer whitespace-nowrap transform hover:scale-105 transition-all focus:border-accent;
+  }
+}
+
+/*  === ANIMATION === */
+@keyframes bounceToTheRight {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+@utility bounce-right {
+  animation: bounceToTheRight 1.5s infinite;
+}
+@keyframes bounceUp {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@utility bounce-up {
+  animation: bounceUp 1.5s infinite;
 }

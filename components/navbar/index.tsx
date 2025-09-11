@@ -8,10 +8,10 @@ import { useSlideOnScroll } from "@/hooks/useSlideOnScroll";
 import { distance } from "motion";
 
 const Navbar = () => {
-  const { y } = useSlideOnScroll({ slideDistance: 115, threshold: 150 });
+  const { y } = useSlideOnScroll({ slideDistance: 100, threshold: 150 });
   return (
     <motion.header
-      className="flex items-center justify-between py-5 px-6 bg-background-muted sticky top-0 z-50 border-b border-primary/30 backdrop-blur-md"
+      className="flex items-center justify-between py-2 px-6 bg-gradient-to-br from-background to-primary/20 sticky top-0 z-50 border-b border-primary/30 backdrop-blur-md"
       style={{ y }}
     >
       <div className="flex items-center gap-3" aria-labelledby="site-title">
@@ -29,7 +29,7 @@ const Navbar = () => {
               <ExternalLink className="inline-block icon ml-1 mb-1  text-primary/70 group-hover:text-primary transition focus:text-primary" />
             </Link>
           </h1>
-          <p className="paragraph">Interactive Framer Motion Learning</p>
+          <p className="paragraph">Interactive Framer Motion Learning for React</p>
         </div>
       </div>
       <div aria-labelledby="author">
