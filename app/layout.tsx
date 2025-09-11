@@ -1,15 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Reem_Kufi_Ink, Days_One, Anek_Malayalam } from "next/font/google";
+import "./globals.css";
+import Navbar from "@/components/navbar";
+
+const reemKufiInk = Reem_Kufi_Ink({
+  variable: "--font-reem-kufi-ink",
   subsets: ["latin"],
+  weight: "400",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const daysOne = Days_One({
+  variable: "--font-days-one",
   subsets: ["latin"],
+  weight: "400",
+});
+
+const anekMalayalam = Anek_Malayalam({
+  variable: "--font-anek-malayalam",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -25,8 +35,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${reemKufiInk.variable} ${daysOne.variable} ${anekMalayalam.variable} antialiased`}
       >
+        <Navbar />
+
         {children}
       </body>
     </html>
