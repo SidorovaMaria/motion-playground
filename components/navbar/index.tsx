@@ -16,7 +16,7 @@ const Navbar = () => {
     >
       <div className="flex items-center gap-3" aria-labelledby="site-title">
         <Link href="/" className="color-icon w-10 h-10">
-          <Image src="./icons/motion.svg" alt="Motion Logo" fill />
+          <Image src="/icons/motion.svg" alt="Motion Logo" fill />
         </Link>
         <div>
           <h1 id="site-title" className="text-gradient font-display font-bold text-2xl">
@@ -36,7 +36,7 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           <Link href="https://portfolio-6dft.vercel.app/" className="cursor-pointer rounded-full  ">
             <Image
-              src="./profile-img.svg"
+              src="/profile-img.svg"
               alt="Maria Sidorova Profile Image"
               width={44}
               height={44}

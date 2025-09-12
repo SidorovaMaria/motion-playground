@@ -95,8 +95,8 @@ export default function Home() {
             <p className="text-gradient text-base mx-auto">
               Animations should feel like part of your app, not an afterthought.
             </p>
-            <div className="max-w-5xl mx-auto mt-10 grid grid-cols-[2fr_1fr] gap-18">
-              <p className="text-foreground/80 text-base text-left ">
+            <div className="max-w-6xl mx-auto mt-10 grid grid-cols-[2fr_1fr] gap-18">
+              <p className="text-foreground/80 text-base text-center ">
                 React empowers you to build dynamic, data-driven interfaces — but making them feel
                 alive with smooth, performant animations is often tricky. <br />
                 Motion solves that problem. <br />
@@ -166,7 +166,7 @@ export default function Home() {
               icon={Sparkles}
               title="Animations Basics"
               description="Master x, y, scale, rotate and many more available transformations in Motion with precision."
-              link="/learn"
+              link="/animation"
               accentColor="#B20650"
             />
             <PathCard

@@ -107,6 +107,19 @@ body {
   .button-outline {
     @apply border-2 border-foreground/70 text-foreground px-5 py-3 rounded-xl cursor-pointer whitespace-nowrap transform hover:scale-105 transition-all focus:border-accent;
   }
+  /* === HELPER STYLES === */
+  /* Hide number input spinners (Chrome/Safari/Edge) */
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Hide in Firefox + standard */
+  .no-spinner {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
 
 /*  === ANIMATION === */
