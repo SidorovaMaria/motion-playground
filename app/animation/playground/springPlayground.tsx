@@ -1,11 +1,12 @@
 "use client";
 import { smoothPath } from "@/utils/graphs";
-import { Info, RefreshCcw } from "lucide-react";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { useState } from "react";
+import { Info, RefreshCcw, SquareArrowUpRight } from "lucide-react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import { revealToBottom } from "@/variants/TextVariants";
 import { ControlsExplain } from "@/utils/utils";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 // Spring Physics Model
 // Classic 1D mass-spring-damper:
 // Original Model
@@ -43,7 +44,7 @@ function simulateSpring(
     v0 = 0, // initial velocity
     target = 1, // final rest position ( normalize to 1 by default)
     dt = 1 / 240, // 240 Hz for smoothness
-    maxTime = 3, // seconds cap to avoid infinite loops
+    maxTime = 5, // seconds cap to avoid infinite loops
     settleVel = 0.001, // velocity threshold to consider as settled <- stop when near zero velocity
     settlePosEps = 0.001, // position threshold to consider as settled <- stop when near target
     settleHold = 0.2, // time to hold within thresholds before considering settled
@@ -96,6 +97,7 @@ const SpringPlayground = ({
   params: SpringPhysicsParams;
   setParams: React.Dispatch<React.SetStateAction<SpringPhysicsParams>>;
 }) => {
+  const router = useRouter();
   const durRef = useRef(1);
   const samples = useMemo(() => {
     // locked: x0=0, v0=0, target=1
@@ -126,6 +128,7 @@ const SpringPlayground = ({
     const pad = (hi - lo || 1) * 0.1;
     return { t0, t1, xMin: lo - pad, xMax: hi + pad };
   }, [samples]);
+
   const toXY = useCallback(
     (t: number, x: number) => {
       const px = SVG_PAD + ((t - t0) / (t1 - t0 || 1)) * (SVG_W - SVG_PAD * 2);
@@ -133,6 +136,13 @@ const SpringPlayground = ({
       return { px, py };
     },
     [t0, t1, xMin, xMax]
+  );
+  const toY = useCallback(
+    (pos: number) => {
+      const span = Math.max(1e-6, xMax - xMin);
+      return SVG_PAD + (1 - (pos - xMin) / span) * (SVG_H - SVG_PAD * 2);
+    },
+    [xMin, xMax]
   );
   const pathD = useMemo(() => {
     if (samples.length < 2) return "";
@@ -146,7 +156,7 @@ const SpringPlayground = ({
   return (
     <div className="w-full p-4">
       <h2 className="text-lg font-display">Animation Type: Spring</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-8 mt-4 ">
         {/* Graph */}
         <div className="background-muted border border-primary/30 rounded-xl p-4 flex items-center justify-center">
           <svg width={SVG_W} height={SVG_H}>
@@ -160,13 +170,23 @@ const SpringPlayground = ({
                 <stop offset="100%" stopColor="var(--color-accent)" />
               </linearGradient>
             </defs>
+            {/* Target Guide */}
+            <line
+              x1={SVG_PAD}
+              y1={toY(1)}
+              x2={SVG_W - SVG_PAD}
+              y2={toY(1)}
+              className="stroke-red-700"
+              strokeWidth="2"
+              strokeDasharray="4 2"
+            />
             <rect x="0" y="0" width="100%" height="100%" fill="url(#grid)" />
             {/* curve */}
             <path d={pathD} stroke="url(#grad)" strokeWidth="3" fill="none" />
           </svg>
         </div>
         {/* Controls */}
-        <div className="flex flex-col gap-8 justify-center">
+        <div className="flex flex-col gap-4 justify-center">
           <Control
             label="Stiffness"
             value={params.stiffness}
@@ -191,6 +211,9 @@ const SpringPlayground = ({
             max={5}
             step={0.1}
           />
+          <p className="paragraph fotn-bold">
+            Calculated Duration of the animation: {durRef.current.toFixed(2)}s (max 5.00s)
+          </p>
           <button
             onClick={onReset}
             disabled={JSON.stringify(params) === JSON.stringify(INITIAL_PARAMS)}
@@ -199,6 +222,56 @@ const SpringPlayground = ({
             <RefreshCcw className="small-icon inline-flex mr-2" />
             Reset All
           </button>
+          <Link
+            href="https://motion.dev/docs/react-transitions#spring"
+            className="w-full primary-button opacity-80 py-1.5 flex items-center justify-center"
+          >
+            <SquareArrowUpRight className="small-icon inline-flex mr-2 text-background" />
+            See Motion Docs
+          </Link>
+        </div>
+        {/* Other Values that can be accepted by Spring Animation */}
+        <div>
+          <h3 className="font-display text-base mb-2">Other Spring Values</h3>
+
+          <ul className="flex flex-col gap-2">
+            <li>
+              <p className="text-sm font-display text-primary">Velocity</p>
+              <p className="paragraph">
+                Initial velocity of the animation, in pixels per second.
+                <br />
+                <span className="font-bold brightness-110"> Default 0.</span>
+              </p>
+            </li>
+            <li>
+              <p className="text-sm font-display text-primary">Rest Speed</p>
+              <p className="paragraph">
+                End animation if absolute speed (in units per second) drops below this value and
+                delta is smaller than restDelta.
+                <br /> <span className="font-bold brightness-110">Default 0.1</span>
+              </p>
+            </li>
+            <li>
+              <p className="text-sm font-display text-primary">Rest Delta</p>
+              <p className="paragraph">
+                End animation if distance to destination is below this value and speed is below
+                restSpeed.
+                <br />
+                <span className="font-bold brightness-110">Default 0.01</span>
+              </p>
+            </li>
+            <li>
+              <p className="text-sm font-display text-primary">Bounce</p>
+              <p className="paragraph">
+                Determines the bounciness of a spring animation.
+                <br /> <span className="font-bold brightness-110">Default 0.25</span>
+              </p>
+              <p className="text-xs italic text-red-400">
+                This is not physics application to the animation. Therefore passing stiffness,
+                damping and mass will not affect the bounce value.
+              </p>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -216,7 +289,7 @@ type ControlProps = {
   step: number;
 };
 const Control = ({ label, value, setValue, min, max, step }: ControlProps) => (
-  <div className="flex flex-col gap-4">
+  <div className="flex flex-col gap-2">
     <div className="flex items-center gap-2 w-full">
       <label className="text-sm text-foreground font-display tracking-wide">{label}</label>
       <input
