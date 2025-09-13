@@ -1,11 +1,11 @@
 "use client";
-import { smoothPath } from "@/utils/graphs";
+import { smoothPath } from "@/utils/graphs/smoothPath";
 import { Info, RefreshCcw, SquareArrowUpRight } from "lucide-react";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { motion } from "motion/react";
 import { revealToBottom } from "@/variants/TextVariants";
 import { ControlsExplain } from "@/utils/utils";
-import { useRouter } from "next/navigation";
+import { createScales, fitRanges, Sample } from "@/utils/graphs/scales";
 import Link from "next/link";
 // Spring Physics Model
 // Classic 1D mass-spring-damper:
@@ -32,11 +32,7 @@ export type SpringPhysicsParams = {
   damping: number; // c
   mass: number; // m
 };
-type Sample = {
-  t: number; //the time (in seconds)=> normalized 0-> 1 for the plotting
-  x: number; // the position at time t -> between 0 and 1, maybe overshooting > 1
-  v: number; // the velocity at time t
-};
+
 function simulateSpring(
   params: SpringPhysicsParams,
   {
@@ -80,10 +76,7 @@ function simulateSpring(
   }
   return out;
 }
-//helper clamp function
-// function clamp(num: number, min: number, max: number) {
-//   return Math.min(Math.max(num, min), max);
-// }
+
 export const INITIAL_PARAMS: SpringPhysicsParams = {
   stiffness: 100,
   damping: 10,
@@ -97,7 +90,6 @@ const SpringPlayground = ({
   params: SpringPhysicsParams;
   setParams: React.Dispatch<React.SetStateAction<SpringPhysicsParams>>;
 }) => {
-  const router = useRouter();
   const durRef = useRef(1);
   const samples = useMemo(() => {
     // locked: x0=0, v0=0, target=1
@@ -109,40 +101,18 @@ const SpringPlayground = ({
   const onReset = () => {
     setParams(INITIAL_PARAMS);
   };
-  //Graph Box + auto fit Y to data
+  const graphRanges = useMemo(() => {
+    return fitRanges(samples);
+  }, [samples]);
+
+  //   //Graph Box + auto fit Y to data
   const SVG_W = 500;
   const SVG_H = 250;
   const SVG_PAD = 8;
-  const { t0, t1, xMin, xMax } = useMemo(() => {
-    if (!samples.length) return { t0: 0, t1: 1, xMin: -0.2, xMax: 1.2 };
-    const t0 = samples[0].t;
-    const t1 = samples[samples.length - 1].t;
-    let lo = Infinity,
-      hi = -Infinity;
-    for (const s of samples) {
-      if (s.x < lo) lo = s.x;
-      if (s.x > hi) hi = s.x;
-    }
-    lo = Math.min(lo, 1);
-    hi = Math.max(hi, 1); // include target line (1)
-    const pad = (hi - lo || 1) * 0.1;
-    return { t0, t1, xMin: lo - pad, xMax: hi + pad };
-  }, [samples]);
 
-  const toXY = useCallback(
-    (t: number, x: number) => {
-      const px = SVG_PAD + ((t - t0) / (t1 - t0 || 1)) * (SVG_W - SVG_PAD * 2);
-      const py = SVG_PAD + (1 - (x - xMin) / (xMax - xMin || 1)) * (SVG_H - SVG_PAD * 2);
-      return { px, py };
-    },
-    [t0, t1, xMin, xMax]
-  );
-  const toY = useCallback(
-    (pos: number) => {
-      const span = Math.max(1e-6, xMax - xMin);
-      return SVG_PAD + (1 - (pos - xMin) / span) * (SVG_H - SVG_PAD * 2);
-    },
-    [xMin, xMax]
+  const { toXY, toPY } = useMemo(
+    () => createScales({ SVG_W: SVG_W, SVG_H: SVG_H, SVG_PAD: SVG_PAD }, graphRanges),
+    [graphRanges]
   );
   const pathD = useMemo(() => {
     if (samples.length < 2) return "";
@@ -173,9 +143,9 @@ const SpringPlayground = ({
             {/* Target Guide */}
             <line
               x1={SVG_PAD}
-              y1={toY(1)}
+              y1={toPY(1)}
               x2={SVG_W - SVG_PAD}
-              y2={toY(1)}
+              y2={toPY(1)}
               className="stroke-red-700"
               strokeWidth="2"
               strokeDasharray="4 2"

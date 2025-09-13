@@ -11,6 +11,8 @@ import {
 } from "@/utils/utils";
 
 import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springPlayground";
+import { SpringVisualizer } from "./Example";
+import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
 
 const AnimationPlayground = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
@@ -34,20 +36,24 @@ const AnimationPlayground = () => {
     }),
     [state]
   );
-  const [AnimationFunction, setAnimationFunction] = useState<AnimationFunction>("Spring");
+  const [AnimationFunction, setAnimationFunction] = useState<AnimationFunction>("tween");
   //For Spring Animation
   const [params, setParams] = useState<SpringPhysicsParams>(INITIAL_PARAMS);
+  // For Tween Animation
+  const [ease, setEase] = React.useState<EaseName>("easeInOut");
   const derivedTransition = useMemo(() => {
-    if (AnimationFunction === "Spring") {
+    if (AnimationFunction === "spring") {
       return {
         type: "spring" as const,
         stiffness: params.stiffness,
         damping: params.damping,
         mass: params.mass,
       };
+    } else if (AnimationFunction === "tween") {
+      return { type: "tween" as const, duration: 0.5, ease: EASES[ease] };
     }
     return { type: "tween" as const, duration: 0.5 };
-  }, [AnimationFunction, params]);
+  }, [AnimationFunction, params, ease]);
 
   const applyPreset = (preset: SimpleAnimation | ComboAnimation) =>
     dispatch({ type: "applyPreset", preset });
@@ -125,7 +131,9 @@ const AnimationPlayground = () => {
       </section>
       <section className="mt-8">
         <SpringPlayground params={params} setParams={setParams} />
+        <TweenPlayground ease={ease} setEase={setEase} />
       </section>
+      {/* <SpringVisualizer /> */}
     </main>
   );
 };
@@ -213,7 +221,7 @@ const AnimationPresetBtn: React.FC<AnimationPresetBtnProps> = ({
 
   return (
     <button
-      className={`button-outline px-2 py-1 text-sm ${
+      className={`font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider ${
         isActive
           ? "bg-gradient-to-r from-primary to-accent text-background  active:border-none active:outline-none focus:border-none focus:ring-0"
           : ""
@@ -225,7 +233,7 @@ const AnimationPresetBtn: React.FC<AnimationPresetBtnProps> = ({
     </button>
   );
 };
-const AnimationFunctionTabs = ["Spring", "Tween", "Easing", "Inertia"] as const;
+const AnimationFunctionTabs = ["spring", "tween", "inertia"] as const;
 type AnimationFunction = (typeof AnimationFunctionTabs)[number];
 
 const AnimationFunctionTab = () => {};
