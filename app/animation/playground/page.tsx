@@ -1,8 +1,10 @@
 "use client";
+
 import Image from "next/image";
 import React, { useMemo, useReducer, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { PersonStanding } from "lucide-react";
+
 import {
   ComboAnimation,
   ComboAnimationPresets,
@@ -12,10 +14,99 @@ import {
 
 import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springPlayground";
 import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
+import Presets from "./Presets";
+
+/**
+ * Types & Constants
+ */
+const AnimationFunctionTabs = ["tween", "spring"] as const;
+type AnimationFunction = (typeof AnimationFunctionTabs)[number];
+
+type TransformState = {
+  x: number;
+  y: number;
+  z: number;
+  scale: number;
+  scaleX: number;
+  scaleY: number;
+  scaleZ: number;
+  rotate: number;
+  rotateX: number;
+  rotateY: number;
+  rotateZ: number;
+  skewX: number;
+  skewY: number;
+  perspective: number;
+};
+
+const INITIAL_STATE: TransformState = {
+  x: 0,
+  y: 0,
+  z: 0,
+  scale: 1,
+  scaleX: 1,
+  scaleY: 1,
+  scaleZ: 1,
+  rotate: 0,
+  rotateX: 0,
+  rotateY: 0,
+  rotateZ: 0,
+  skewX: 0,
+  skewY: 0,
+  perspective: 0,
+};
+
+type Action =
+  | { type: "set"; key: keyof TransformState; value: number }
+  | { type: "applyPreset"; preset: SimpleAnimation | ComboAnimation }
+  | { type: "reset" };
+
+/**
+ * Reducer keep the state predicatable
+ * - 'set' tweek a single transform field
+ * - "applyPreset": start from a clean base + the preset (so combos don't stack)
+ * - "reset": reset all transform fields to their initial values
+ */
+function reducer(state: TransformState, action: Action): TransformState {
+  switch (action.type) {
+    case "set":
+      return { ...state, [action.key]: action.value };
+    case "applyPreset":
+      return { ...INITIAL_STATE, ...action.preset };
+    case "reset":
+      return INITIAL_STATE;
+    default:
+      return state;
+  }
+}
+
+/**
+ * ----------------------------------------
+ * Main Page Component
+ * ----------------------------------------
+ */
 
 const AnimationPlayground = () => {
+  // Tarnsform State (drives the animate sqaure in the playground)
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+  // Which preset is currently active (for button highlight)
   const [activePreset, setActivePreset] = useState<string | null>(null);
+
+  // Which Animation Function is currently selected
+  const [animationFunction, setAnimationFunction] = useState<AnimationFunction>("tween");
+
+  //Spring Animation State
+  const [params, setParams] = useState<SpringPhysicsParams>(INITIAL_PARAMS);
+
+  //Tween Control Props
+  const [ease, setEase] = React.useState<EaseName>("easeIn");
+  const [duration, setDuration] = React.useState<number>(0.3);
+
+  /**
+   * Memoized animate props to avoid re-renders on unrelated state changes.
+   * Note: `transformPerspective` is applied via style, not animate.
+   */
   const animateProps = useMemo(
     () => ({
       x: state.x,
@@ -35,32 +126,35 @@ const AnimationPlayground = () => {
     }),
     [state]
   );
-  const [AnimationFunction, setAnimationFunction] = useState<AnimationFunction>("tween");
-  //For Spring Animation
-  const [params, setParams] = useState<SpringPhysicsParams>(INITIAL_PARAMS);
-  // For Tween Animation
-  const [ease, setEase] = React.useState<EaseName>("easeIn");
-  const [duration, setDuration] = React.useState<number>(0.3);
+  /**
+   * Derived Transition Object based on selected Animation Function and its params
+   * Note: useMemo to avoid re-renders on unrelated state changes.
+   */
   const derivedTransition = useMemo(() => {
-    if (AnimationFunction === "spring") {
+    if (animationFunction === "spring") {
       return {
         type: "spring" as const,
         stiffness: params.stiffness,
         damping: params.damping,
         mass: params.mass,
       };
-    } else if (AnimationFunction === "tween") {
-      return { type: "tween" as const, duration: duration, ease: EASES[ease] };
     }
-    return { type: "tween" as const, duration: 0.3 };
-  }, [AnimationFunction, params, ease, duration]);
-
+    //tween
+    return { type: "tween" as const, duration: duration, ease: EASES[ease] };
+  }, [animationFunction, params, ease, duration]);
+  /**
+   * Handlers
+   */
+  // Apply a preset by dispatching an action to the reducer
   const applyPreset = (preset: SimpleAnimation | ComboAnimation) =>
     dispatch({ type: "applyPreset", preset });
   const resetValues = () => dispatch({ type: "reset" });
 
+  /**
+   * Render Animation Controls based on selected Animation Function
+   */
   const renderAnimationControls = () => {
-    if (AnimationFunction === "spring") {
+    if (animationFunction === "spring") {
       return (
         <motion.div
           key="spring"
@@ -72,29 +166,28 @@ const AnimationPlayground = () => {
           <SpringPlayground params={params} setParams={setParams} />;
         </motion.div>
       );
-    } else if (AnimationFunction === "tween") {
-      return (
-        <motion.div
-          key="tween"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 40 }}
-          transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
-        >
-          <TweenPlayground
-            ease={ease}
-            setEase={setEase}
-            duration={duration}
-            setDuration={setDuration}
-          />
-        </motion.div>
-      );
-    } else {
-      throw new Error("Unsupported Animation Function");
     }
+    //Tween
+    return (
+      <motion.div
+        key="tween"
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 40 }}
+        transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+      >
+        <TweenPlayground
+          ease={ease}
+          setEase={setEase}
+          duration={duration}
+          setDuration={setDuration}
+        />
+      </motion.div>
+    );
   };
   return (
-    <main className="relative max-w-7xl mx-auto px-6  py-10">
+    <main className="relative max-w-7xl mx-auto px-6 py-10">
+      {/* Header */}
       <div role="heading" aria-level={2} className="flex items-center gap-3">
         <div className="color-icon w-8 h-8">
           <Image src="/icons/motion.svg" alt="Motion Logo" fill />
@@ -106,9 +199,13 @@ const AnimationPlayground = () => {
           </p>
         </div>
       </div>
+      {/* Main Grid */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
         {/* Playground View */}
-        <aside className="bg-background-muted rounded-2xl p-12 flex items-center justify-center h-full relative overflow-hidden border border-primary/30">
+        <aside
+          className="bg-background-muted rounded-2xl p-12 flex items-center justify-center h-full relative overflow-hidden border border-primary/30"
+          aria-label="Animation Playground Preview"
+        >
           <motion.div
             animate={animateProps}
             transition={derivedTransition}
@@ -117,58 +214,26 @@ const AnimationPlayground = () => {
             <PersonStanding className="icon text-background w-8 h-8" />
           </motion.div>
         </aside>
+        {/* Presets Section */}
+        <Presets
+          applyPreset={applyPreset}
+          resetValues={resetValues}
+          activePreset={activePreset}
+          setActivePreset={setActivePreset}
+        />
 
-        <div>
-          {/* Simple Animation */}
-          <div>
-            <h3 className="text-lg font-display">Simple Animation Presets</h3>
-            <p className="paragraph">Applying only one transformation at a time.</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-4">
-              {SimpleAnimationPresets.map((preset) => (
-                <AnimationPresetBtn
-                  key={preset.name}
-                  preset={preset}
-                  applyPreset={applyPreset}
-                  resetValues={resetValues}
-                  activePreset={activePreset}
-                  setActivePreset={setActivePreset}
-                />
-              ))}
-            </div>
-          </div>
-          {/* Combo Animation */}
-          <div>
-            <h3 className="text-lg font-display">Combo Animation Presets</h3>
-            <p className="paragraph">Applying multiple transformations at once.</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-4">
-              {ComboAnimationPresets.map((preset) => (
-                <AnimationPresetBtn
-                  key={preset.name}
-                  preset={preset}
-                  applyPreset={applyPreset}
-                  resetValues={resetValues}
-                  activePreset={activePreset}
-                  setActivePreset={setActivePreset}
-                />
-              ))}
-            </div>
-          </div>
-          {/* Reset Button */}
-          {/* <button onClick={resetValues} className="w-full button-outline py-1.5 ">
-            <RefreshCcw className="small-icon inline-flex mr-2" />
-            Reset All
-          </button> */}
-        </div>
-        {/* Transition Function Tabs */}
+        {/* Transition Function Tabs + Controls */}
       </section>
-      <section className="mt-8">
+      <section className="mt-16">
         {/* Only the tab row participates in shared layout */}
         <LayoutGroup id="anim-tabs">
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 gap-3">
             {AnimationFunctionTabs.map((tab) => {
-              const active = AnimationFunction === tab;
+              const active = animationFunction === tab;
               return (
                 <motion.button
+                  aria-pressed={active}
+                  aria-label={`Select ${tab} animation function`}
                   key={tab}
                   type="button"
                   layout="position" // smoother width/position changes
@@ -211,100 +276,3 @@ const AnimationPlayground = () => {
 };
 
 export default AnimationPlayground;
-
-type TransformState = {
-  x: number;
-  y: number;
-  z: number;
-  scale: number;
-  scaleX: number;
-  scaleY: number;
-  scaleZ: number;
-  rotate: number;
-  rotateX: number;
-  rotateY: number;
-  rotateZ: number;
-  skewX: number;
-  skewY: number;
-  perspective: number;
-};
-
-const INITIAL_STATE: TransformState = {
-  x: 0,
-  y: 0,
-  z: 0,
-  scale: 1,
-  scaleX: 1,
-  scaleY: 1,
-  scaleZ: 1,
-  rotate: 0,
-  rotateX: 0,
-  rotateY: 0,
-  rotateZ: 0,
-  skewX: 0,
-  skewY: 0,
-  perspective: 0,
-};
-type Action =
-  | { type: "set"; key: keyof TransformState; value: number }
-  | { type: "applyPreset"; preset: SimpleAnimation | ComboAnimation }
-  | { type: "reset" };
-
-function reducer(state: TransformState, action: Action): TransformState {
-  switch (action.type) {
-    case "set":
-      return { ...state, [action.key]: action.value };
-    case "applyPreset":
-      return { ...INITIAL_STATE, ...action.preset };
-    case "reset":
-      return INITIAL_STATE;
-    default:
-      return state;
-  }
-}
-
-type AnimationPresetBtnProps = {
-  preset: SimpleAnimation | ComboAnimation;
-  applyPreset: (preset: SimpleAnimation | ComboAnimation) => void;
-  resetValues: () => void;
-  activePreset: string | null;
-  setActivePreset: React.Dispatch<React.SetStateAction<string | null>>;
-};
-
-const AnimationPresetBtn: React.FC<AnimationPresetBtnProps> = ({
-  preset,
-  applyPreset,
-  resetValues,
-  activePreset,
-  setActivePreset,
-}) => {
-  const isActive = activePreset === preset.name;
-
-  const handleClick = () => {
-    if (isActive) {
-      resetValues();
-      setActivePreset(null);
-    } else {
-      applyPreset(preset);
-      setActivePreset(preset.name);
-    }
-  };
-  const Icon = preset.icon;
-
-  return (
-    <button
-      type="button"
-      className={`font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider ${
-        isActive
-          ? "bg-gradient-to-r from-primary to-accent text-background  active:border-none active:outline-none focus:border-none focus:ring-0"
-          : ""
-      }`}
-      onClick={handleClick}
-    >
-      <Icon className={`small-icon inline-flex mr-2 ${isActive ? "text-background" : ""}`} />
-      {preset.name}
-    </button>
-  );
-};
-const AnimationFunctionTabs = ["spring", "tween"] as const;
-type AnimationFunction = (typeof AnimationFunctionTabs)[number];

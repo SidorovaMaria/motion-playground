@@ -1,7 +1,7 @@
 import { ControlsExplain } from "@/utils/utils";
 import { revealToBottom } from "@/variants/TextVariants";
 import { Info } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 type ControlProps = {
   label: string;
   value: number;
@@ -33,12 +33,14 @@ const Control = ({ label, value, setValue, min, max, step }: ControlProps) => (
         title="Info"
       >
         <Info className="" />
-        <motion.div
-          variants={revealToBottom}
-          className="text-xs leading-relaxed font-sans absolute top-full left-1/2 -translate-x-1/2 bg-background text-foreground p-2 rounded-md w-64 text-center pointer-events-none"
-        >
-          {ControlsExplain[label as keyof typeof ControlsExplain]}
-        </motion.div>
+        <AnimatePresence initial={true} mode="wait">
+          <motion.div
+            variants={revealToBottom}
+            className="text-xs leading-relaxed font-sans absolute top-full left-1/2 -translate-x-1/2 bg-background text-foreground p-2 rounded-md w-64 text-center pointer-events-none"
+          >
+            {ControlsExplain[label as keyof typeof ControlsExplain]}
+          </motion.div>
+        </AnimatePresence>
       </motion.div>
     </div>
 

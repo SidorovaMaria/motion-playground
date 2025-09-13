@@ -63,27 +63,6 @@ export const ComboAnimationPresets = [
     icon: Shell,
   },
   {
-    name: "Stretch X",
-    scaleX: 0,
-    scaleY: 2,
-    icon: Maximize2,
-  },
-  {
-    name: "Spiral Out",
-    rotateZ: 1080,
-    scale: 0.3,
-    x: 200,
-    y: -200,
-    icon: RotateCwSquare,
-  },
-  {
-    name: "Diagonal Dash",
-    x: 200,
-    y: -200,
-    rotate: 45,
-    icon: CornerUpRight,
-  },
-  {
     name: "Zoom & Flip",
     scale: 2,
     rotateY: 360,
