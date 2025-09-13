@@ -114,4 +114,5 @@ export const ControlsExplain = {
   Damping:
     "Controls the strength of the opposing force. Higher value make the spring stop sooner, reducing oscillation. Zero will result in infinite oscillation.",
   Mass: "Controls the mass of the object. Higher value make the object heavier, and create slower movements.",
+  "Tween Duration": "Controls how long the animation should take to complete, in seconds.",
 };

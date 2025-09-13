@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { motion } from "motion/react";
-import { PersonStanding, RefreshCcw } from "lucide-react";
+import React, { useMemo, useReducer, useState } from "react";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { PersonStanding } from "lucide-react";
 import {
   ComboAnimation,
   ComboAnimationPresets,
@@ -11,7 +11,6 @@ import {
 } from "@/utils/utils";
 
 import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springPlayground";
-import { SpringVisualizer } from "./Example";
 import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
 
 const AnimationPlayground = () => {
@@ -40,7 +39,8 @@ const AnimationPlayground = () => {
   //For Spring Animation
   const [params, setParams] = useState<SpringPhysicsParams>(INITIAL_PARAMS);
   // For Tween Animation
-  const [ease, setEase] = React.useState<EaseName>("easeInOut");
+  const [ease, setEase] = React.useState<EaseName>("easeIn");
+  const [duration, setDuration] = React.useState<number>(0.3);
   const derivedTransition = useMemo(() => {
     if (AnimationFunction === "spring") {
       return {
@@ -50,17 +50,49 @@ const AnimationPlayground = () => {
         mass: params.mass,
       };
     } else if (AnimationFunction === "tween") {
-      return { type: "tween" as const, duration: 0.5, ease: EASES[ease] };
+      return { type: "tween" as const, duration: duration, ease: EASES[ease] };
     }
-    return { type: "tween" as const, duration: 0.5 };
-  }, [AnimationFunction, params, ease]);
+    return { type: "tween" as const, duration: 0.3 };
+  }, [AnimationFunction, params, ease, duration]);
 
   const applyPreset = (preset: SimpleAnimation | ComboAnimation) =>
     dispatch({ type: "applyPreset", preset });
   const resetValues = () => dispatch({ type: "reset" });
-  useEffect(() => {
-    console.log(derivedTransition);
-  }, [derivedTransition]);
+
+  const renderAnimationControls = () => {
+    if (AnimationFunction === "spring") {
+      return (
+        <motion.div
+          key="spring"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+        >
+          <SpringPlayground params={params} setParams={setParams} />;
+        </motion.div>
+      );
+    } else if (AnimationFunction === "tween") {
+      return (
+        <motion.div
+          key="tween"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 40 }}
+          transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+        >
+          <TweenPlayground
+            ease={ease}
+            setEase={setEase}
+            duration={duration}
+            setDuration={setDuration}
+          />
+        </motion.div>
+      );
+    } else {
+      throw new Error("Unsupported Animation Function");
+    }
+  };
   return (
     <main className="relative max-w-7xl mx-auto px-6  py-10">
       <div role="heading" aria-level={2} className="flex items-center gap-3">
@@ -130,10 +162,50 @@ const AnimationPlayground = () => {
         {/* Transition Function Tabs */}
       </section>
       <section className="mt-8">
-        <SpringPlayground params={params} setParams={setParams} />
-        <TweenPlayground ease={ease} setEase={setEase} />
+        {/* Only the tab row participates in shared layout */}
+        <LayoutGroup id="anim-tabs">
+          <div className="grid grid-cols-2">
+            {AnimationFunctionTabs.map((tab) => {
+              const active = AnimationFunction === tab;
+              return (
+                <motion.button
+                  key={tab}
+                  type="button"
+                  layout="position" // smoother width/position changes
+                  onClick={() => {
+                    setAnimationFunction(tab);
+                    setActivePreset(null);
+                    dispatch({ type: "reset" });
+                  }}
+                  className={`
+              relative font-display capitalize p-3 text-xs tracking-wider
+              transition-colors focus:outline-none cursor-pointer rounded-t-xl
+              active:outline-none active:ring-0 active:border-none  focus:border-none focus:ring-0 hover:bg-gradient-to-r hover:from-primary/40 hover:to-accent/40
+              bg-gradient-to-r from-primary/20 to-accent/20
+              ${active ? "text-background" : "text-foreground"}
+            `}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="tab-bg"
+                      className="absolute inset-0
+                           bg-gradient-to-r from-primary to-accent pointer-events-none opacity-90 rounded-tl-xl rounded-tr-xl"
+                      transition={{ type: "spring", stiffness: 220, damping: 40, mass: 0.5 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </LayoutGroup>
+
+        <div className="mt-4">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {renderAnimationControls()}
+          </AnimatePresence>
+        </div>
       </section>
-      {/* <SpringVisualizer /> */}
     </main>
   );
 };
@@ -221,6 +293,7 @@ const AnimationPresetBtn: React.FC<AnimationPresetBtnProps> = ({
 
   return (
     <button
+      type="button"
       className={`font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider ${
         isActive
           ? "bg-gradient-to-r from-primary to-accent text-background  active:border-none active:outline-none focus:border-none focus:ring-0"
@@ -233,7 +306,5 @@ const AnimationPresetBtn: React.FC<AnimationPresetBtnProps> = ({
     </button>
   );
 };
-const AnimationFunctionTabs = ["spring", "tween", "inertia"] as const;
+const AnimationFunctionTabs = ["spring", "tween"] as const;
 type AnimationFunction = (typeof AnimationFunctionTabs)[number];
-
-const AnimationFunctionTab = () => {};

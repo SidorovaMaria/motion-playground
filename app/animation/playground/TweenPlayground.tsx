@@ -11,9 +11,13 @@ import {
   backOut,
   backInOut,
   anticipate,
+  cubicBezier,
 } from "motion/react";
 import { smoothPath } from "@/utils/graphs/smoothPath";
 import { createScales, fitRanges } from "@/utils/graphs/scales";
+import Control from "@/components/controls/Control";
+import Link from "next/link";
+import { SquareArrowUpRight } from "lucide-react";
 
 export const EASES: Record<string, (t: number) => number> = {
   easeIn,
@@ -32,9 +36,13 @@ export type EaseName = keyof typeof EASES;
 const TweenPlayground = ({
   ease,
   setEase,
+  duration,
+  setDuration,
 }: {
   ease: EaseName;
   setEase: React.Dispatch<React.SetStateAction<EaseName>>;
+  duration: number;
+  setDuration: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const samples = useMemo(() => {
     const f = EASES[ease];
@@ -105,6 +113,23 @@ const TweenPlayground = ({
               onClick={setEase}
             />
           ))}
+          <Link
+            href="https://motion.dev/docs/react-transitions#tween"
+            className="font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider col-span-2 justify-center flex items-center"
+          >
+            <SquareArrowUpRight className="small-icon inline-flex mr-2 text-foreground" />
+            See Motion Docs
+          </Link>
+          <div className="col-span-3">
+            <Control
+              label="Tween Duration"
+              value={duration}
+              setValue={(v) => setDuration(v)}
+              min={0.1}
+              max={5}
+              step={0.1}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -124,7 +149,7 @@ const EaseButton = ({
 }) => {
   return (
     <button
-      className={` font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider  last:col-span-3 ${
+      className={` font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider   ${
         isActive
           ? "bg-gradient-to-r from-primary to-accent text-background  active:border-none active:outline-none focus:border-none focus:ring-0"
           : ""
