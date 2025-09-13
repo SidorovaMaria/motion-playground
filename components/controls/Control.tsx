@@ -1,3 +1,4 @@
+import { TransformState } from "@/app/animation/playground/page";
 import { ControlsExplain } from "@/utils/utils";
 import { revealToBottom } from "@/variants/TextVariants";
 import { Info } from "lucide-react";
@@ -5,15 +6,37 @@ import { AnimatePresence, motion } from "motion/react";
 type ControlProps = {
   label: string;
   value: number;
-  setValue: (v: number) => void;
+  dispatchValue?: keyof TransformState;
+  setValue?: (v: number) => void;
+  dispatch?: React.Dispatch<{ type: "set"; key: keyof TransformState; value: number }>;
   min: number;
   max: number;
   step: number;
+  small?: boolean;
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
-const Control = ({ label, value, setValue, min, max, step }: ControlProps) => (
+const Control = ({
+  label,
+  value,
+  setValue,
+  min,
+  max,
+  step,
+  dispatch,
+  dispatchValue,
+  small = false,
+  Icon,
+}: ControlProps) => (
   <div className="flex flex-col gap-2">
-    <div className="flex items-center gap-2 w-full">
-      <label className="text-sm text-foreground font-display tracking-wide">{label}</label>
+    <div className={`flex items-center gap-2 w-full`}>
+      {Icon && <Icon className="text-secondary stroke-3 icon" />}
+      <label
+        className={`text-sm text-foreground font-display tracking-wide ${
+          small ? "text-xs text-center" : ""
+        }`}
+      >
+        {label}
+      </label>
       <input
         type="number"
         value={value}
@@ -21,15 +44,28 @@ const Control = ({ label, value, setValue, min, max, step }: ControlProps) => (
         max={max}
         step={step}
         onChange={(e) => {
-          setValue(Number(e.target.value));
+          if (setValue) {
+            setValue(Number(e.target.value));
+          }
+          if (dispatch && dispatchValue) {
+            dispatch({
+              type: "set",
+              key: dispatchValue,
+              value: Number(e.target.value),
+            });
+          }
         }}
-        className="rounded-md border border-primary/20 bg-background-muted px-3 py-1.5 text-sm text-center no-spinner font-display"
+        className={`rounded-md border border-primary/20 bg-background-muted px-1 py-1.5 text-sm text-center no-spinner font-display
+                ${small ? "px-0! text-xs! border-none" : ""}`}
       />
+
       <motion.div
         initial="hidden"
         whileHover="hovered"
         whileFocus="hovered"
-        className="icon text-accent/80 hover:text-accent cursor-pointer transition relative"
+        className={`text-secondary/80 hover:text-secondary cursor-pointer transition relative  flex items-center justify-center ${
+          small ? "small-icon ml-auto mr-2" : "icon"
+        }`}
         title="Info"
       >
         <Info className="" />
@@ -48,12 +84,22 @@ const Control = ({ label, value, setValue, min, max, step }: ControlProps) => (
       type="range"
       min={min}
       max={max}
+      tabIndex={-1}
       step={step}
       value={value}
       onChange={(e) => {
-        setValue(Number(e.target.value));
+        if (setValue) {
+          setValue(Number(e.target.value));
+        }
+        if (dispatch && dispatchValue) {
+          dispatch({
+            type: "set",
+            key: dispatchValue,
+            value: Number(e.target.value),
+          });
+        }
       }}
-      className="accent-accent cursor-pointer rounded-md focus:ring-primary  focus:outline-none active:ring-0 active:border-none"
+      className="w-full h-3 mt-1 bg-background-muted border border-primary/20 rounded-lg appearance-none cursor-pointer range-slider focus:ring-0 focus:outline-none active:bg-background-muted accent-primary"
     />
   </div>
 );

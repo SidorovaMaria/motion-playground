@@ -20,6 +20,7 @@ import Link from "next/link";
 import { SquareArrowUpRight } from "lucide-react";
 
 export const EASES: Record<string, (t: number) => number> = {
+  linear: (t: number) => t,
   easeIn,
   easeOut,
   easeInOut,
@@ -115,7 +116,7 @@ const TweenPlayground = ({
           ))}
           <Link
             href="https://motion.dev/docs/react-transitions#tween"
-            className="font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider col-span-2 justify-center flex items-center"
+            className="font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider justify-center flex items-center"
           >
             <SquareArrowUpRight className="small-icon inline-flex mr-2 text-foreground" />
             See Motion Docs

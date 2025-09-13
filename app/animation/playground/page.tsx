@@ -15,6 +15,7 @@ import {
 import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springPlayground";
 import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
 import Presets from "./Presets";
+import PlaygroundControls from "./PlaygroundControls";
 
 /**
  * Types & Constants
@@ -22,18 +23,16 @@ import Presets from "./Presets";
 const AnimationFunctionTabs = ["tween", "spring"] as const;
 type AnimationFunction = (typeof AnimationFunctionTabs)[number];
 
-type TransformState = {
+export type TransformState = {
   x: number;
   y: number;
   z: number;
   scale: number;
   scaleX: number;
   scaleY: number;
-  scaleZ: number;
   rotate: number;
   rotateX: number;
   rotateY: number;
-  rotateZ: number;
   skewX: number;
   skewY: number;
   perspective: number;
@@ -46,11 +45,9 @@ const INITIAL_STATE: TransformState = {
   scale: 1,
   scaleX: 1,
   scaleY: 1,
-  scaleZ: 1,
   rotate: 0,
   rotateX: 0,
   rotateY: 0,
-  rotateZ: 0,
   skewX: 0,
   skewY: 0,
   perspective: 0,
@@ -100,7 +97,7 @@ const AnimationPlayground = () => {
   const [params, setParams] = useState<SpringPhysicsParams>(INITIAL_PARAMS);
 
   //Tween Control Props
-  const [ease, setEase] = React.useState<EaseName>("easeIn");
+  const [ease, setEase] = React.useState<EaseName>("linear");
   const [duration, setDuration] = React.useState<number>(0.3);
 
   /**
@@ -115,11 +112,9 @@ const AnimationPlayground = () => {
       scale: state.scale,
       scaleX: state.scaleX,
       scaleY: state.scaleY,
-      scaleZ: state.scaleZ,
       rotate: state.rotate,
       rotateX: state.rotateX,
       rotateY: state.rotateY,
-      rotateZ: state.rotateZ,
       skewX: state.skewX,
       skewY: state.skewY,
       transformPerspective: state.perspective,
@@ -200,7 +195,7 @@ const AnimationPlayground = () => {
         </div>
       </div>
       {/* Main Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
+      <section className="grid grid-cols-1 md:grid-cols-[3fr_4fr] gap-6 mt-8">
         {/* Playground View */}
         <aside
           className="bg-background-muted rounded-2xl p-12 flex items-center justify-center h-full relative overflow-hidden border border-primary/30"
@@ -215,12 +210,15 @@ const AnimationPlayground = () => {
           </motion.div>
         </aside>
         {/* Presets Section */}
-        <Presets
-          applyPreset={applyPreset}
-          resetValues={resetValues}
-          activePreset={activePreset}
-          setActivePreset={setActivePreset}
-        />
+        <div>
+          <PlaygroundControls states={state} dispatch={dispatch} reset={resetValues} />
+          {/* <Presets
+            applyPreset={applyPreset}
+            resetValues={resetValues}
+            activePreset={activePreset}
+            setActivePreset={setActivePreset}
+          /> */}
+        </div>
 
         {/* Transition Function Tabs + Controls */}
       </section>

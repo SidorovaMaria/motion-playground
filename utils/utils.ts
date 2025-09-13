@@ -43,7 +43,6 @@ export const SimpleAnimationPresets = [
   {
     name: "ZoomOut",
     scale: 0.7,
-    perspective: 500,
     icon: ZoomOut,
   },
 ];
@@ -58,7 +57,7 @@ export const ComboAnimationPresets = [
   },
   {
     name: "Helicopter Spin",
-    rotateZ: 720,
+    rotate: 720,
     scale: 1.2,
     icon: Shell,
   },
@@ -66,7 +65,7 @@ export const ComboAnimationPresets = [
     name: "Zoom & Flip",
     scale: 2,
     rotateY: 360,
-    perspective: 600,
+    perspective: 800,
     icon: Expand,
   },
 ];
