@@ -4,6 +4,7 @@ import {
   SimpleAnimation,
   SimpleAnimationPresets,
 } from "@/utils/utils";
+import { ArrowRight } from "lucide-react";
 import React from "react";
 /**
  *  UI: Preset Button
@@ -56,14 +57,33 @@ type PropsPresets = {
   resetValues: () => void;
   activePreset: string | null;
   setActivePreset: React.Dispatch<React.SetStateAction<string | null>>;
+  changeMode: (mode: "manual" | "presets") => void;
 };
-const Presets = ({ applyPreset, resetValues, activePreset, setActivePreset }: PropsPresets) => {
+const Presets = ({
+  applyPreset,
+  resetValues,
+  activePreset,
+  setActivePreset,
+  changeMode,
+}: PropsPresets) => {
   return (
     <div>
       {/* Simple Animation */}
       <div>
-        <h3 className="text-lg font-display">Simple Animation Presets</h3>
-        <p className="paragraph">Applying only one transformation at a time.</p>
+        <div className="flex items-center justify-between">
+          <div className="">
+            <h3 className="text-lg font-display">Simple Animation Presets</h3>
+            <p className="paragraph">Applying only one transformation at a time.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => changeMode("manual")}
+            className="text-xs px-3 py-2 font-display bg-secondary text-foreground rounded-md display flex items-center hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+          >
+            <p>Switch to Manual Mode</p>
+            <ArrowRight className="small-icon ml-2 text-foreground stroke-3" />
+          </button>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-4">
           {SimpleAnimationPresets.map((preset) => (
             <AnimationPresetBtn

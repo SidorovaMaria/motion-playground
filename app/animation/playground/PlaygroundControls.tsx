@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 import { revealFromBottom } from "@/variants/TextVariants";
 import {
   ArrowDownUp,
+  ArrowLeft,
+  ArrowRight,
   ArrowRightLeft,
   ArrowUpNarrowWide,
   FoldHorizontal,
@@ -23,8 +25,9 @@ type Props = {
   reset: () => void;
   states: Record<string, number>;
   dispatch: React.Dispatch<{ type: "set"; key: keyof TransformState; value: number }>;
+  changeMode: (mode: "manual" | "presets") => void;
 };
-const PlaygroundControls = ({ states, dispatch, reset }: Props) => {
+const PlaygroundControls = ({ states, dispatch, reset, changeMode }: Props) => {
   const { x, y, z, scale, scaleX, scaleY, rotate, rotateX, rotateY, skewX, skewY, perspective } =
     states;
   return (
@@ -46,12 +49,22 @@ const PlaygroundControls = ({ states, dispatch, reset }: Props) => {
             <Pointer className="text-foreground inline-block absolute -top-1 -right-12 -rotate-90 bounce-up" />
           </motion.span>
         </h3>
-        <button
-          onClick={reset}
-          className="p-2 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform "
-        >
-          <RefreshCcw className="w-5 h-5 text-foreground stroke-2" />
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => changeMode("presets")}
+            className="text-xs px-3 py-2 font-display bg-secondary text-foreground rounded-md display flex items-center hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+          >
+            <ArrowLeft className="small-icon mr-2 text-foreground stroke-3" />
+            <p>Switch to Preset Mode</p>
+          </button>
+          <button
+            onClick={reset}
+            className="p-2 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform "
+          >
+            <RefreshCcw className="w-5 h-5 text-foreground stroke-2" />
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-3 mt-4 gap-4">
         <Control

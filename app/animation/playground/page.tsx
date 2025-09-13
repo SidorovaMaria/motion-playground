@@ -22,6 +22,8 @@ import PlaygroundControls from "./PlaygroundControls";
  */
 const AnimationFunctionTabs = ["tween", "spring"] as const;
 type AnimationFunction = (typeof AnimationFunctionTabs)[number];
+const modeTypes = ["presets", "manual"] as const;
+type modeType = (typeof modeTypes)[number];
 
 export type TransformState = {
   x: number;
@@ -38,7 +40,7 @@ export type TransformState = {
   perspective: number;
 };
 
-const INITIAL_STATE: TransformState = {
+export const INITIAL_STATE: TransformState = {
   x: 0,
   y: 0,
   z: 0,
@@ -84,7 +86,10 @@ function reducer(state: TransformState, action: Action): TransformState {
  */
 
 const AnimationPlayground = () => {
-  // Tarnsform State (drives the animate sqaure in the playground)
+  //Mode Manual / Presets
+  const [mode, setMode] = useState<modeType>("presets");
+
+  // Transform State (drives the animate square in the playground)
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   // Which preset is currently active (for button highlight)
@@ -162,6 +167,7 @@ const AnimationPlayground = () => {
         </motion.div>
       );
     }
+
     //Tween
     return (
       <motion.div
@@ -179,6 +185,28 @@ const AnimationPlayground = () => {
         />
       </motion.div>
     );
+  };
+  const renderMode = () => {
+    if (mode === "manual") {
+      return (
+        <PlaygroundControls
+          states={state}
+          dispatch={dispatch}
+          reset={resetValues}
+          changeMode={setMode}
+        />
+      );
+    } else {
+      return (
+        <Presets
+          applyPreset={applyPreset}
+          resetValues={resetValues}
+          activePreset={activePreset}
+          setActivePreset={setActivePreset}
+          changeMode={setMode}
+        />
+      );
+    }
   };
   return (
     <main className="relative max-w-7xl mx-auto px-6 py-10">
@@ -210,15 +238,7 @@ const AnimationPlayground = () => {
           </motion.div>
         </aside>
         {/* Presets Section */}
-        <div>
-          <PlaygroundControls states={state} dispatch={dispatch} reset={resetValues} />
-          {/* <Presets
-            applyPreset={applyPreset}
-            resetValues={resetValues}
-            activePreset={activePreset}
-            setActivePreset={setActivePreset}
-          /> */}
-        </div>
+        <div>{renderMode()}</div>
 
         {/* Transition Function Tabs + Controls */}
       </section>
@@ -242,17 +262,16 @@ const AnimationPlayground = () => {
                   }}
                   className={`
               relative font-display capitalize p-3 text-xs tracking-wider
-              transition-colors focus:outline-none cursor-pointer rounded-t-xl
+              transition-colors focus:outline-none cursor-pointer rounded-xl
               active:outline-none active:ring-0 active:border-none  focus:border-none focus:ring-0 hover:bg-gradient-to-r hover:from-primary/40 hover:to-accent/40
-              bg-gradient-to-r from-primary/20 to-accent/20
-              ${active ? "text-background" : "text-foreground"}
+           ${active ? "text-background" : "text-foreground"}
             `}
                 >
                   {active && (
                     <motion.span
                       layoutId="tab-bg"
                       className="absolute inset-0
-                           bg-gradient-to-r from-primary to-accent pointer-events-none opacity-90 rounded-tl-xl rounded-tr-xl"
+                           bg-gradient-to-r from-primary to-accent pointer-events-none opacity-90 rounded-xl"
                       transition={{ type: "spring", stiffness: 220, damping: 40, mass: 0.5 }}
                     />
                   )}
@@ -263,7 +282,7 @@ const AnimationPlayground = () => {
           </div>
         </LayoutGroup>
 
-        <div className="mt-4">
+        <div className=" ">
           <AnimatePresence mode="popLayout" initial={false}>
             {renderAnimationControls()}
           </AnimatePresence>

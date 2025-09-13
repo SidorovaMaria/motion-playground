@@ -125,7 +125,7 @@ const SpringPlayground = ({
   }, [samples, toXY]);
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 ">
       <h2 className="text-lg font-display">Animation Type: Spring</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-8 mt-4 ">
         {/* Graph */}

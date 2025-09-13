@@ -1,4 +1,4 @@
-import { TransformState } from "@/app/animation/playground/page";
+import { INITIAL_STATE, TransformState } from "@/app/animation/playground/page";
 import { ControlsExplain } from "@/utils/utils";
 import { revealToBottom } from "@/variants/TextVariants";
 import { Info } from "lucide-react";
@@ -56,7 +56,15 @@ const Control = ({
           }
         }}
         className={`rounded-md border border-primary/20 bg-background-muted px-1 py-1.5 text-sm text-center no-spinner font-display
-                ${small ? "px-0! text-xs! border-none" : ""}`}
+                ${small ? "px-0! text-xs! border-none" : ""}
+                $`}
+        style={{
+          color: dispatchValue
+            ? value !== INITIAL_STATE[dispatchValue]
+              ? "var(--color-accent)"
+              : "inherit"
+            : "inherit",
+        }}
       />
 
       <motion.div
