@@ -115,7 +115,7 @@ type SpringPlaygroundProps = {
 const SpringPlayground = ({ params, setParams }: SpringPlaygroundProps) => {
   const durRef = useRef(1);
 
-  const { samples, duration, graphRanges, toXY, toPY, pathD } = useMemo(() => {
+  const { duration, toPY, pathD } = useMemo(() => {
     const s = simulateSpring(params);
     const ranges = fitRanges(s);
     //Build Pixel mapping
@@ -130,10 +130,7 @@ const SpringPlayground = ({ params, setParams }: SpringPlaygroundProps) => {
     })();
     durRef.current = Math.min(s[s.length - 1]?.t || 1e-6, 5);
     return {
-      samples: s,
       duration: durRef.current,
-      graphRanges: ranges,
-      toXY,
       toPY,
       pathD,
     };

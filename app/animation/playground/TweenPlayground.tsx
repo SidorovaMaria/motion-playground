@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import {
   easeIn,
   easeOut,
@@ -11,7 +11,6 @@ import {
   backOut,
   backInOut,
   anticipate,
-  cubicBezier,
 } from "motion/react";
 import { smoothPath } from "@/utils/graphs/smoothPath";
 import { createScales, fitRanges } from "@/utils/graphs/scales";
@@ -33,44 +32,41 @@ export const EASES: Record<string, (t: number) => number> = {
   anticipate,
 };
 export type EaseName = keyof typeof EASES;
+const SVG_W = 500;
+const SVG_H = 250;
+const SVG_PAD = 8;
 
-const TweenPlayground = ({
-  ease,
-  setEase,
-  duration,
-  setDuration,
-}: {
+type Props = {
   ease: EaseName;
   setEase: React.Dispatch<React.SetStateAction<EaseName>>;
   duration: number;
   setDuration: React.Dispatch<React.SetStateAction<number>>;
-}) => {
-  const samples = useMemo(() => {
+};
+const TweenPlayground = ({ ease, setEase, duration, setDuration }: Props) => {
+  const { toPY, pathD } = useMemo(() => {
     const f = EASES[ease];
-    const N = 300;
-    return Array.from({ length: N }, (_, i) => {
+    const N = 1200; // oversample
+    const raw = Array.from({ length: N }, (_, i) => {
       const t = i / (N - 1);
       return { t, x: f(t) };
     });
+    const ranges = fitRanges(raw);
+    //Build Pixel mapping
+    const { toXY, toPY } = createScales({ SVG_W, SVG_H, SVG_PAD }, ranges);
+    const pathD = (() => {
+      if (raw.length < 2) return "";
+      const pts = raw.map((s) => {
+        const { px, py } = toXY(s.t, s.x);
+        return { x: px, y: py };
+      });
+      return smoothPath(pts, 0.9);
+    })();
+    return {
+      toPY,
+      pathD,
+    };
   }, [ease]);
-  const graphRanges = useMemo(() => {
-    return fitRanges(samples);
-  }, [samples]);
-  const SVG_W = 500;
-  const SVG_H = 250;
-  const SVG_PAD = 8;
-  const { toXY, toPY } = useMemo(
-    () => createScales({ SVG_W: SVG_W, SVG_H: SVG_H, SVG_PAD: SVG_PAD }, graphRanges),
-    [graphRanges]
-  );
-  const pathD = useMemo(() => {
-    if (samples.length < 2) return "";
-    const pts = samples.map((s) => {
-      const { px, py } = toXY(s.t, s.x);
-      return { x: px, y: py };
-    });
-    return smoothPath(pts, 0.9);
-  }, [samples, toXY]);
+  const handleSelectEase = useCallback((name: EaseName) => setEase(name), [setEase]);
 
   return (
     <div className="w-full p-4">
@@ -78,7 +74,7 @@ const TweenPlayground = ({
       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mt-4 ">
         {/* Graph */}
         <div className="background-muted border border-primary/30 rounded-xl p-4 flex items-center justify-center">
-          <svg width={SVG_W} height={SVG_H}>
+          <svg width={SVG_W} height={SVG_H} role="img" aria-label="Tween Animation Graph">
             {/* Soft grid */}
             <defs>
               <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
@@ -111,7 +107,7 @@ const TweenPlayground = ({
               key={ename}
               ease={ename as EaseName}
               isActive={ename === ease}
-              onClick={setEase}
+              onSelect={handleSelectEase}
             />
           ))}
           <Link
@@ -139,25 +135,35 @@ const TweenPlayground = ({
 
 export default TweenPlayground;
 
-const EaseButton = ({
-  ease,
-  isActive,
-  onClick,
-}: {
+const EaseButton: React.FC<{
   ease: EaseName;
   isActive: boolean;
-  onClick: (ease: EaseName) => void;
-}) => {
+  onSelect: (ease: EaseName) => void;
+}> = memo(function EaseButton({ ease, isActive, onSelect }) {
+  const onClick = useCallback(() => onSelect(ease), [ease, onSelect]);
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onSelect(ease);
+      }
+    },
+    [ease, onSelect]
+  );
   return (
     <button
+      type="button"
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      aria-pressed={isActive}
+      title={`${ease} easing function`}
       className={` font-display capitalize button-outline border-foreground/30! p-2 text-xs tracking-wider   ${
         isActive
           ? "bg-gradient-to-r from-primary to-accent text-background  active:border-none active:outline-none focus:border-none focus:ring-0"
           : ""
       }`}
-      onClick={() => onClick(ease)}
     >
       {ease}
     </button>
   );
-};
+});
