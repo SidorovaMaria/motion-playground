@@ -152,13 +152,22 @@ body {
     @apply text-gradient font-display font-bold text-2xl;
   }
   .subheading {
-    @apply text-foreground/90 text-sm font-medium tracking-wide;
+    @apply text-foreground/90 text-sm font-display;
+  }
+  .aside-code-block {
+    @apply block w-full p-4 my-2 rounded-lg overflow-x-auto text-primary/90 font-mono border border-foreground/10 bg-background/50 font-semibold;
   }
   .code-block {
     @apply block w-full bg-background-muted p-2 pl-4 my-2 rounded-lg overflow-x-auto text-primary/90 font-mono font-semibold;
   }
   .code-block .comment {
     @apply text-foreground/50 italic text-xs;
+  }
+  .aside-block {
+    @apply border-l-4 border-accent/70 bg-background-muted px-4 py-2 my-6 rounded-r-lg overflow-hidden;
+  }
+  .aside-title {
+    @apply text-accent/80 font-display font-bold text-lg w-fit;
   }
 }
 

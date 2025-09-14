@@ -78,11 +78,12 @@ const AnimationPage = () => {
           <motion.div
             animate={{ borderRadius: "100%" }}
             initial={{ borderRadius: "0" }}
-            transition={{ duration: 2 }}
+            transition={{ duration: 2, delay: 0.5 }}
             className=" w-24 h-24 bg-primary/80 rounded-lg shrink-0"
           />
         </div>
       </section>
+      {/* What can you animate? */}
       <section aria-label="What can you animate?" className="mt-12 max-w-4xl mx-auto">
         <h2 className="heading mb-4">What can you animate?</h2>
         <p className="paragraph text-left max-w-2xl">
@@ -167,6 +168,58 @@ const AnimationPage = () => {
             <p className="paragraph text-left">And many more...</p>
           </div>
         </div>
+      </section>
+      <section aria-label="Motion Transitions" className="mt-12 max-w-4xl mx-auto space-y-2">
+        <h2 className="heading">
+          Motion Transitions - <span className="text-lg">What happens if you do nothing?</span>
+        </h2>
+
+        <p className="paragraph">
+          Motion has good instincts. It chooses a default transition that makes sense for the type
+          of value you’re animating. But you can always customize it to suit your needs.
+        </p>
+        <p className="paragraph">
+          Moving something around the screen or changing its size?
+          <code className="code text-xs">x, y, scale</code>? It’ll reach for a spring—because
+          physics feels natural.
+        </p>
+        <p className="paragraph ">
+          Fading or tinting colors? <code className="code text-xs">opacity, backgroundColor</code>{" "}
+          That’s handled with a clean, time-based easing curve. Different motions, different
+          rhythms.
+        </p>
+        <p className="subheading">What are they? Keep reading to know...</p>
+      </section>
+      <section
+        aria-label="Transitions - What are they?"
+        className="mt-12 max-w-4xl mx-auto mb-20 space-y-2"
+      >
+        <h2 className="heading"> Transitions - What are they?</h2>
+        <h3 className="text-sm text-foreground/80 font-display">
+          Motion transitions are the animations that occur when a component changes from one state
+          to another.
+        </h3>
+        <aside className="aside-block">
+          <h4 className="aside-title">How to define a transition</h4>
+          <p className="paragraph text-sm mt-2">
+            You can define a transition by passing a{" "}
+            <code className="code text-xs">transition</code> prop to any motion component. This prop
+            accepts an object that specifies the type of transition, its duration, easing function,
+            and other parameters.
+          </p>
+          <div className="aside-code-block text-xs mt-4">
+            <code>
+              {`<motion.div 
+  animate={{ x: 100 }}
+  transition={{ type: 'spring', stiffness: 100, damping: 10 }} 
+/>`}
+              <span className="comment block mt-2">
+                #animates to x: {"100"} using a spring transition with specified stiffness and
+                damping{" "}
+              </span>
+            </code>
+          </div>
+        </aside>
       </section>
     </main>
   );
