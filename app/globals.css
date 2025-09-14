@@ -28,6 +28,7 @@
     --color-text: #f0f3f4;
     --color-bg: #081012;
     --color-bg-muted: #111827cc;
+    --color-code-block-bg: #0a1e32fa;
     --color-primary-100: #43b4e5;
     --color-secondary-100: #1a6d89;
     --color-accent-100: #f8e025;
@@ -158,7 +159,7 @@ body {
     @apply block w-full p-4 my-2 rounded-lg overflow-x-auto text-primary/90 font-mono border border-foreground/10 bg-background/50 font-semibold;
   }
   .code-block {
-    @apply block w-full bg-background-muted p-2 pl-4 my-2 rounded-lg overflow-x-auto text-primary/90 font-mono font-semibold;
+    @apply block w-full rounded-lg overflow-x-auto text-primary/90 font-mono font-semibold;
   }
   .code-block .comment {
     @apply text-foreground/50 italic text-xs;

@@ -34,6 +34,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/prism-themes@1.9.0/themes/prism-one-light.css"
+        />
+      </head>
       <body
         className={`${reemKufiInk.variable} ${daysOne.variable} ${anekMalayalam.variable} antialiased`}
       >

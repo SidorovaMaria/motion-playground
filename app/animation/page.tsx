@@ -1,13 +1,14 @@
 "use client";
+import CodeHighliter from "@/components/CodeHighliter";
 import { revealSpanVariant } from "@/variants/buttonVariants";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, Code } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const AnimationPage = () => {
   const router = useRouter();
+
   return (
     <main className="relative max-w-7xl mx-auto px-10 py-12">
       <header className="font-display max-w-4xl mx-auto text-cente space-y-1 ">
@@ -65,15 +66,15 @@ const AnimationPage = () => {
           pass values to the element it will automatically animate to those values.
         </p>
         <div className="flex gap-7 items-center justify-center mt-4">
-          <div className="code-block text-xs rounded-2xl p-4 ">
-            <code>
-              {`<motion.div animate={{ border-radius: '100%' }} transition={{ duration: 2 }} />`}
-              <span className="comment block mt-2">
-                {" "}
-                #animates to border-radius: {"100%"} in 2 seconds{" "}
-                {`<- refresh browser to see the effect`}
-              </span>
-            </code>
+          <div className="w-full ">
+            <CodeHighliter>
+              {`<motion.div 
+  animate={{ borderRadius: '100%' }} 
+  transition={{ duration: 2 }} 
+/> 
+// animates to border-radius: "100%" in 2 seconds 
+// <- refresh browser to see the effect`}
+            </CodeHighliter>
           </div>
           <motion.div
             animate={{ borderRadius: "100%" }}
@@ -204,20 +205,29 @@ const AnimationPage = () => {
           <p className="paragraph text-sm mt-2">
             You can define a transition by passing a{" "}
             <code className="code text-xs">transition</code> prop to any motion component. This prop
-            accepts an object that specifies the type of transition, its duration, easing function,
-            and other parameters.
+            accepts an object that specifies the type of transition for the overall animation, or a
+            specific prop, its duration, easing function, and other parameters.
           </p>
-          <div className="aside-code-block text-xs mt-4">
-            <code>
-              {`<motion.div 
+
+          {/* TODO  Include parameters that can be added to the transition like types, repeat, duration and so on */}
+          <div className="mt-4">
+            <CodeHighliter>
+              {`<motion.div
   animate={{ x: 100 }}
-  transition={{ type: 'spring', stiffness: 100, damping: 10 }} 
-/>`}
-              <span className="comment block mt-2">
-                #animates to x: {"100"} using a spring transition with specified stiffness and
-                damping{" "}
-              </span>
-            </code>
+  transition={{ type: "spring", stiffness: 100, damping: 10 }}
+/>
+// Moves to x:100 using a spring`}
+            </CodeHighliter>
+            <CodeHighliter>
+              {`<motion.li
+  animate={{ x: 0, opacity: 1 }}
+  transition={{
+    default: { type: "spring", stiffness: 180, damping: 20 }, // applies to x
+    opacity: { type: "tween", ease: "linear", duration: 0.25 } // override for opacity
+  }}
+/>
+// x uses a spring; opacity uses a linear tween`}
+            </CodeHighliter>
           </div>
         </aside>
       </section>
