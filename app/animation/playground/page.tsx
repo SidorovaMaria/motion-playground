@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React, { useMemo, useReducer, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { PersonStanding } from "lucide-react";
+import { ArrowLeft, ArrowRight, PersonStanding } from "lucide-react";
 
 import { ComboAnimation, SimpleAnimation } from "@/utils/utils";
 
@@ -11,6 +11,8 @@ import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springP
 import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
 import Presets from "./Presets";
 import PlaygroundControls from "./PlaygroundControls";
+import { useRouter } from "next/navigation";
+import { revealSpanVariant } from "@/variants/buttonVariants";
 
 /**
  * Types & Constants
@@ -80,6 +82,8 @@ function reducer(state: TransformState, action: Action): TransformState {
  */
 
 const AnimationPlayground = () => {
+  //Router for navigation
+  const router = useRouter();
   //Mode Manual / Presets
   const [mode, setMode] = useState<Mode>("presets");
 
@@ -203,14 +207,30 @@ const AnimationPlayground = () => {
     }
   };
   return (
-    <main className="relative max-w-7xl mx-auto px-6 py-10">
+    <main className="relative max-w-7xl mx-auto px-6 py-4">
       {/* Header */}
+      <motion.button
+        initial="rest"
+        whileHover="hovered"
+        whileFocus="hovered"
+        animate="rest"
+        onClick={() => router.back()}
+        aria-label="Go back to previous page"
+        className="primary-button rounded-md flex items-center text-sm px-3 py-1! mb-4"
+      >
+        <motion.span variants={revealSpanVariant} className="text-background bounce-left">
+          <ArrowLeft />
+        </motion.span>
+        <p>Go back</p>
+      </motion.button>
       <div role="heading" aria-level={2} className="flex items-center gap-3">
         <div className="color-icon w-8 h-8">
           <Image src="/icons/motion.svg" alt="Motion Logo" fill />
         </div>
         <div>
-          <h1 className="text-2xl font-display text-gradient">Motion Animation Playground</h1>
+          <h1 className="text-xl font-display text-gradient">
+            Motion Transforms and Transition Playground
+          </h1>
           <p className="paragraph">
             Explore the world of motion transformation with this interactive playground.
           </p>
