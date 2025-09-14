@@ -5,12 +5,7 @@ import React, { useMemo, useReducer, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { PersonStanding } from "lucide-react";
 
-import {
-  ComboAnimation,
-  ComboAnimationPresets,
-  SimpleAnimation,
-  SimpleAnimationPresets,
-} from "@/utils/utils";
+import { ComboAnimation, SimpleAnimation } from "@/utils/utils";
 
 import SpringPlayground, { INITIAL_PARAMS, SpringPhysicsParams } from "./springPlayground";
 import TweenPlayground, { EaseName, EASES } from "./TweenPlayground";
@@ -22,8 +17,7 @@ import PlaygroundControls from "./PlaygroundControls";
  */
 const AnimationFunctionTabs = ["tween", "spring"] as const;
 type AnimationFunction = (typeof AnimationFunctionTabs)[number];
-const modeTypes = ["presets", "manual"] as const;
-type modeType = (typeof modeTypes)[number];
+export type Mode = "presets" | "manual";
 
 export type TransformState = {
   x: number;
@@ -55,7 +49,7 @@ export const INITIAL_STATE: TransformState = {
   perspective: 0,
 };
 
-type Action =
+export type Action =
   | { type: "set"; key: keyof TransformState; value: number }
   | { type: "applyPreset"; preset: SimpleAnimation | ComboAnimation }
   | { type: "reset" };
@@ -87,7 +81,7 @@ function reducer(state: TransformState, action: Action): TransformState {
 
 const AnimationPlayground = () => {
   //Mode Manual / Presets
-  const [mode, setMode] = useState<modeType>("presets");
+  const [mode, setMode] = useState<Mode>("presets");
 
   // Transform State (drives the animate square in the playground)
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
