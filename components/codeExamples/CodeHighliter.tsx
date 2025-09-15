@@ -1,23 +1,24 @@
 import React from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/esm/styles/hljs";
-const CodeHighliter = ({ children }: { children: string }) => {
+const CodeHighliter = ({ children, inline = false }: { children: string; inline?: boolean }) => {
   return (
     <SyntaxHighlighter
       language="javascript"
       style={nightOwl}
       customStyle={{
         borderRadius: 12,
-        marginTop: 16,
-        marginBottom: 16,
-        marginLeft: 0,
+        marginTop: inline ? 4 : 16,
+        marginBottom: inline ? 4 : 16,
+        marginLeft: inline ? 4 : 0,
         marginRight: 0,
-        paddingLeft: 24,
-        paddingTop: 16,
-        paddingBottom: 16,
+        paddingLeft: inline ? 12 : 24,
+        paddingTop: inline ? 4 : 16,
+        paddingBottom: inline ? 4 : 16,
         background: "var(--color-code-block-bg)",
         fontSize: 12,
-        lineHeight: "18px",
+        lineHeight: inline ? "22px" : "18px",
+        display: inline ? "inline" : "block",
       }}
       codeTagProps={{ style: { background: "transparent" } }}
     >

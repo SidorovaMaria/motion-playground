@@ -1,5 +1,7 @@
 "use client";
-import CodeHighliter from "@/components/CodeHighliter";
+import CodeAndExample from "@/components/codeExamples/CodeAndExample";
+import CodeHighliter from "@/components/codeExamples/CodeHighliter";
+import MotionExample from "@/components/codeExamples/MotionExample";
 import { revealSpanVariant } from "@/variants/buttonVariants";
 import { motion } from "framer-motion";
 import { ArrowRight, Code } from "lucide-react";
@@ -170,66 +172,181 @@ const AnimationPage = () => {
           </div>
         </div>
       </section>
-      <section aria-label="Motion Transitions" className="mt-12 max-w-4xl mx-auto space-y-2">
-        <h2 className="heading">
-          Motion Transitions - <span className="text-lg">What happens if you do nothing?</span>
-        </h2>
-
-        <p className="paragraph">
-          Motion has good instincts. It chooses a default transition that makes sense for the type
-          of value you’re animating. But you can always customize it to suit your needs.
-        </p>
-        <p className="paragraph">
-          Moving something around the screen or changing its size?
-          <code className="code text-xs">x, y, scale</code>? It’ll reach for a spring—because
-          physics feels natural.
-        </p>
-        <p className="paragraph ">
-          Fading or tinting colors? <code className="code text-xs">opacity, backgroundColor</code>{" "}
-          That’s handled with a clean, time-based easing curve. Different motions, different
-          rhythms.
-        </p>
-        <p className="subheading">What are they? Keep reading to know...</p>
-      </section>
       <section
-        aria-label="Transitions - What are they?"
-        className="mt-12 max-w-4xl mx-auto mb-20 space-y-2"
+        aria-label="What values are animatable in Motion?"
+        className="mt-12 max-w-4xl mx-auto"
       >
-        <h2 className="heading"> Transitions - What are they?</h2>
-        <h3 className="text-sm text-foreground/80 font-display">
-          Motion transitions are the animations that occur when a component changes from one state
-          to another.
-        </h3>
-        <aside className="aside-block">
-          <h4 className="aside-title">How to define a transition</h4>
-          <p className="paragraph text-sm mt-2">
-            You can define a transition by passing a{" "}
-            <code className="code text-xs">transition</code> prop to any motion component. This prop
-            accepts an object that specifies the type of transition for the overall animation, or a
-            specific prop, its duration, easing function, and other parameters.
-          </p>
-
-          {/* TODO  Include parameters that can be added to the transition like types, repeat, duration and so on */}
-          <div className="mt-4">
-            <CodeHighliter>
-              {`<motion.div
-  animate={{ x: 100 }}
+        <h2 className="heading mb-4">What values are animatable in Motion?</h2>
+        <p className="paragraph text-left max-w-2xl">
+          Motion can animate with a variety of value types, including numbers, strings, hex colors,
+          rgba colors and even complex values like shadows and arrays.
+        </p>
+        <ul
+          aria-label="Transforms list"
+          className="list-disc list-inside space-y-2 mt-4 text-base text-foreground [&>li]:text-sm font-display"
+        >
+          <li className="">
+            Numbers: <code className="code">0, 1, 100, etc</code>
+          </li>
+          <li>
+            String containing numbers: <code className="code">{`"0vh", "55px", "15%", etc`}</code>
+          </li>
+          <li>
+            Colors:{" "}
+            <code className="code">
+              HEX {`-> "#fff" `}, RGBA {`-> "rgba(255, 255, 255, 1)" `}, HSLA
+              {`-> "hsla(0, 0%, 100%, 1)" `},
+            </code>
+          </li>
+          <li>
+            Complex Strings like box-shadow:{" "}
+            <code className="code">{`"0 4px 8px rgba(0, 0, 0, 0.1)"`}</code>
+          </li>
+          <li>
+            Visibility: <code className="code">{`"hidden" / "visible"`}</code>
+          </li>
+          <li>
+            Display: <code className="code">{`"none" / "block"`}</code>
+          </li>
+          <li>
+            Width/Height: <code className="code">{`"auto"`}</code>
+          </li>
+        </ul>
+      </section>
+      {/* Motion Transition */}
+      <hr className="max-w-4xl mx-auto my-12 border-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-60" />
+      <section aria-label="Motion Transition" className=" max-w-4xl mx-auto ">
+        <h2 className="main-heading">Motion Transition</h2>
+        <section
+          aria-label="Transitions - What are they?"
+          className="mt-12 max-w-4xl mx-auto mb-20 space-y-2"
+        >
+          <h2 className="heading"> Transitions - What are they?</h2>
+          <h3 className="text-sm text-foreground/80 font-display">
+            Motion transitions are the animations that occur when a component changes from one state
+            to another.
+          </h3>
+          <aside className="aside-block">
+            <h4 className="aside-title">How to define a transition</h4>
+            <p className="paragraph text-sm mt-2">
+              You can define a transition by passing a{" "}
+              <code className="code text-xs">transition</code> prop to any motion component. This
+              prop accepts an object that specifies the type of transition for the overall
+              animation, or a specific prop, its duration, easing function, and other parameters.
+            </p>
+            <div className="">
+              <h5 className="aside-title text-base mt-4 mb-2">Animation Props available:</h5>
+              <ul className="list-disc list-inside space-y-2 mt-4 mb-2 text-base text-foreground [&>li]:text-sm font-display">
+                <li>
+                  Type -<CodeHighliter inline>{`"spring", "tween"`}</CodeHighliter>
+                </li>
+                <li>Timing/Phyics</li>
+                <ul className="list-disc list-inside ml-4 text-sm space-y-2">
+                  <li>
+                    Tween <CodeHighliter inline>{`"duration", "delay", "ease"`}</CodeHighliter>
+                  </li>
+                  <li>
+                    Spring{" "}
+                    <CodeHighliter
+                      inline
+                    >{`"stiffness", "damping", "mass", "bounce"`}</CodeHighliter>
+                  </li>
+                </ul>
+                <li>
+                  Repeat Controls
+                  <CodeHighliter inline>{`"repeat", "repeatType", "repeatDelay"`}</CodeHighliter>
+                </li>
+                <li>
+                  Per-value overrides
+                  <CodeHighliter
+                    inline
+                  >{`transition={{ default: {…}, opacity: {…} }}`}</CodeHighliter>
+                </li>
+              </ul>
+              <p className="paragraph text-left max-w-2xl">
+                This is the starter kit, not the whole toolbox. Motion also offers advanced spring
+                tuning, keyframes, inertia for gestures, AnimatePresence (enter/exit), layout, and
+                motion values. We’ll explore each in its own chapter as you progress through the
+                website
+              </p>
+            </div>
+            {/* TODO  Include parameters that can be added to the transition like types, repeat, duration and so on */}
+            <div className="mt-4">
+              <CodeAndExample
+                codeText={`<motion.div
+  animate={{ rotate: 90 }}
   transition={{ type: "spring", stiffness: 100, damping: 10 }}
 />
-// Moves to x:100 using a spring`}
-            </CodeHighliter>
-            <CodeHighliter>
-              {`<motion.li
-  animate={{ x: 0, opacity: 1 }}
+// Moves to rotate:90 using a spring`}
+                motionProps={{
+                  initial: { rotate: 0 },
+                  animate: { rotate: 90 },
+                  transition: { type: "spring", stiffness: 100, damping: 10 },
+                }}
+              />
+              <CodeAndExample
+                codeText={`<motion.div
+  animate={{ boxShadow: "8px 4px 10px rgba(255, 255, 0, 1)" }}
+  transition={{ type: "tween", ease: "easeIn", duration: 1 }}
+  />
+  // Moves to x:100 using a spring`}
+                motionProps={{
+                  initial: { boxShadow: "0 0px 0px rgba(0, 0, 0, 0)" },
+                  animate: { boxShadow: "8px 4px 8px rgba(255,255,0,1)" },
+                  transition: { type: "tween", ease: "easeIn", duration: 1 },
+                }}
+              />
+              <CodeAndExample
+                codeText={`<motion.div
+  animate={{ x: 50, opacity: 1 }}
   transition={{
-    default: { type: "spring", stiffness: 180, damping: 20 }, // applies to x
-    opacity: { type: "tween", ease: "linear", duration: 0.25 } // override for opacity
-  }}
+    default: { type: "spring", stiffness: 180, damping: 20,
+      repeat: 2, repeatType: "mirror", repeatDelay: 0.5 }, // applies to x
+    opacity: { type: "tween", ease: "easeIn", duration: 1.5 } // override for opacity
+    }}
 />
-// x uses a spring; opacity uses a linear tween`}
-            </CodeHighliter>
-          </div>
-        </aside>
+// x uses a spring; opacity uses an easeIn tween`}
+                motionProps={{
+                  initial: { x: 0, opacity: 0.2 },
+                  animate: { x: 50, opacity: 1 },
+                  transition: {
+                    default: {
+                      type: "spring",
+                      stiffness: 180,
+                      damping: 20,
+                      repeat: 2,
+                      repeatType: "mirror",
+                      repeatDelay: 0.5,
+                    },
+                    opacity: { type: "tween", ease: "easeIn", duration: 1.5 },
+                  },
+                }}
+              />
+            </div>
+          </aside>
+        </section>
+        <section
+          aria-label="Motion default transitions"
+          className="mt-12 max-w-4xl mx-auto space-y-2"
+        >
+          <h2 className="heading">
+            Motion Transitions - <span className="text-lg">What happens if you do nothing?</span>
+          </h2>
+          <p className="paragraph">
+            Motion has good instincts. It chooses a default transition that makes sense for the type
+            of value you’re animating. But you can always customize it to suit your needs.
+          </p>
+          <p className="paragraph">
+            Moving something around the screen or changing its size?
+            <code className="code text-xs">x, y, scale</code>? It’ll reach for a spring—because
+            physics feels natural.
+          </p>
+          <p className="paragraph ">
+            Fading or tinting colors? <code className="code text-xs">opacity, backgroundColor</code>{" "}
+            That’s handled with a clean, time-based easing curve. Different motions, different
+            rhythms.
+          </p>
+        </section>
       </section>
     </main>
   );
