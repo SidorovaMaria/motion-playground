@@ -16,7 +16,9 @@ const AnimationPage = () => {
       <header className="font-display max-w-4xl mx-auto text-cente space-y-1 ">
         <h1 className="main-heading">Animation Basics</h1>
         <p className="subheading">
-          What is motion&apos;s <code className="code">animate </code>? + Transforms & Transitions
+          Meet Motion’s <code className="code">animate</code>: declare the target, let Motion drive
+          the frames. This page orients you to what you can animate and how transitions shape the
+          feel.
         </p>
       </header>
       <section aria-label="Animation Overview" className="mt-3 max-w-4xl mx-auto">
@@ -28,13 +30,26 @@ const AnimationPage = () => {
           You say where to go, Motion figures out how to get there. When the values in animate
           change, the component animates.
         </p>
+
         <div className="text-left space-y-4 mt-4 text-foreground">
           <p className="font-display text-sm ">
             Overview of what you&apos;ll learn in this section:
           </p>
           <ul className="list-disc list-inside space-y-2 text-base text-foreground/80 font-bold">
-            <li> What you can animate (transforms, opacity, filters, shadows, and more)</li>
-            <li>How to tune the transition (timing, easing, spring physics, repeats)</li>
+            <li>
+              See how to swap any element for its motion equivalent (
+              <code className="code">motion.div</code>, <code className="code">motion.a</code>, …).
+            </li>
+            <li>
+              Learn what’s animatable: transforms (<code className="code">x</code>,{" "}
+              <code className="code">scale</code>, <code className="code">rotate</code>, …) and
+              common CSS (opacity, color, filters, shadows).
+            </li>
+            <li>
+              Understand transitions at a glance: <strong>tween</strong> (duration/ease) vs{" "}
+              <strong>spring</strong> (stiffness/damping/bounce).
+            </li>
+            <li>Quick look/examples into animate transitions</li>
           </ul>
         </div>
       </section>
@@ -172,6 +187,7 @@ const AnimationPage = () => {
           </div>
         </div>
       </section>
+      {/* What values are animatable in Motion? */}
       <section
         aria-label="What values are animatable in Motion?"
         className="mt-12 max-w-4xl mx-auto"
@@ -209,14 +225,16 @@ const AnimationPage = () => {
             Display: <code className="code">{`"none" / "block"`}</code>
           </li>
           <li>
-            Width/Height: <code className="code">{`"auto"`}</code>
+            Width/Height: <code className="code">{`"auto" / "block"`}</code>
           </li>
         </ul>
       </section>
       {/* Motion Transition */}
       <hr className="max-w-4xl mx-auto my-12 border-0 h-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-60" />
+
       <section aria-label="Motion Transition" className=" max-w-4xl mx-auto ">
         <h2 className="main-heading">Motion Transition</h2>
+        {/* Transition - What are they? */}
         <section
           aria-label="Transitions - What are they?"
           className="mt-12 max-w-4xl mx-auto mb-20 space-y-2"
@@ -270,7 +288,6 @@ const AnimationPage = () => {
                 website
               </p>
             </div>
-            {/* TODO  Include parameters that can be added to the transition like types, repeat, duration and so on */}
             <div className="mt-4">
               <CodeAndExample
                 codeText={`<motion.div
@@ -322,9 +339,23 @@ const AnimationPage = () => {
                   },
                 }}
               />
+              <motion.button
+                initial="rest"
+                whileHover="hovered"
+                whileFocus="hovered"
+                animate="rest"
+                onClick={() => router.push("/animation/playground")}
+                className="primary-button flex items-center text-base py-2 px-3! mt-4 mx-auto"
+              >
+                <p>Play around in the playground </p>
+                <motion.span variants={revealSpanVariant} className="text-background bounce-right">
+                  <ArrowRight />
+                </motion.span>
+              </motion.button>
             </div>
           </aside>
         </section>
+        {/* Motion default transitions */}
         <section
           aria-label="Motion default transitions"
           className="mt-12 max-w-4xl mx-auto space-y-2"
@@ -348,6 +379,21 @@ const AnimationPage = () => {
           </p>
         </section>
       </section>
+      {/* Motion Transition Deep Dive */}
+
+      <motion.button
+        initial="rest"
+        whileHover="hovered"
+        whileFocus="hovered"
+        animate="rest"
+        onClick={() => router.push("/animation/motion-transition")}
+        className="primary-button flex items-center text-base font-display tracking-wide font-normal p-4! mx-auto w-full max-w-4xl rounded-md mt-12 "
+      >
+        <p>Deep dive Into the Motion Transition </p>
+        <motion.span variants={revealSpanVariant} className="text-background bounce-right ml-auto">
+          <ArrowRight className="" />
+        </motion.span>
+      </motion.button>
     </main>
   );
 };
