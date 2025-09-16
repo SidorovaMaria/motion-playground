@@ -30,7 +30,7 @@
     --color-bg-muted: #111827cc;
     --color-code-block-bg: #0a1e32fa;
     --color-primary-100: #43b4e5;
-    --color-secondary-100: #1a6d89;
+    --color-secondary-100: #0fdca9;
     --color-accent-100: #f8e025;
   }
 }
@@ -58,6 +58,9 @@ body {
     rgba(255, 255, 255, 0) 100%
   );
 }
+@utility code {
+  @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
+}
 @utility white-shimmer-light {
   background: linear-gradient(
     90deg,
@@ -76,6 +79,9 @@ body {
   }
   .paragraph {
     @apply text-foreground/80 text-base font-medium tracking-wide;
+  }
+  .example-paragraph {
+    @apply text-foreground/80 font-medium tracking-wide leading-[1.35] text-sm mt-4 text-center [&>code]:text-xs [&>code]:code [&>code]:p-0;
   }
   .small-icon {
     @apply w-4 h-4 text-foreground/70;
@@ -141,8 +147,12 @@ body {
   pre.code {
     @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
   }
-  code.code {
+  code.code,
+  code.code-a {
     @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
+  }
+  code.code-a {
+    @apply text-secondary! not-italic p-0;
   }
 
   /* Page Styles */
@@ -169,6 +179,18 @@ body {
   }
   .aside-title {
     @apply text-accent/80 font-display font-bold text-lg w-fit;
+  }
+  .bordered-section {
+    @apply mt-12 max-w-4xl mx-auto bg-background-muted p-6 border-l-4 border-accent/70 rounded-lg rounded-l-none;
+  }
+  .props-list {
+    @apply list-disc space-y-2 list-inside  py-2 w-full  [&>li>span]:font-display [&>li>span]:text-sm [&>li>span]:text-foreground;
+  }
+  .props {
+    @apply font-bold tracking-[0.015rem] italic text-primary;
+    span {
+      @apply font-display text-foreground not-italic;
+    }
   }
 }
 

@@ -2,12 +2,13 @@ import PropsListItem from "@/components/cards_tags/PropsListItem";
 import CodeAndExample from "@/components/codeExamples/CodeAndExample";
 import CodeHighliter from "@/components/codeExamples/CodeHighliter";
 import MotionExample from "@/components/codeExamples/MotionExample";
+import { Links } from "@/utils/links";
 import React from "react";
 
 const MotionTransitionPage = () => {
   return (
     <main className="relative max-w-7xl mx-auto px-10 py-12">
-      <header className="font-display max-w-4xl mx-auto text-cente space-y-2 ">
+      <header className="font-display max-w-4xl mx-auto space-y-2 ">
         <h1 className="main-heading">Deep Dive into Motion Transition</h1>
         <p className="subheading">
           Lets explore the transition prop together with practical examples and copy-paste snippets.
@@ -86,6 +87,7 @@ const MotionTransitionPage = () => {
         <div className="code-block">
           <CodeHighliter>{`<motion.div ... transition={{type:'tween'}}/>`}</CodeHighliter>
         </div>
+        {/* What is a tween? */}
         <article
           role="article"
           aria-labelledby="what-is-a-tween"
@@ -117,6 +119,7 @@ const MotionTransitionPage = () => {
             </p>
           </div>
         </article>
+        {/* Core properties of a tween */}
         <article
           role="article"
           aria-labelledby="tween-core-props"
@@ -155,19 +158,112 @@ const MotionTransitionPage = () => {
               }}
             />
             <ul className="list-disc space-y-2 list-inside my-4 py-2 w-full text-left">
-              <PropsListItem href="#duration" title="duration" description="Seconds to run." />
-              <PropsListItem href="#ease" title="ease" description="Progress curve." />
-              <PropsListItem href="#delay" title="delay" description="Wait before start." />
-              <PropsListItem href="#repeat" title="repeat" description="Times to repeat." />
-              <PropsListItem href="#repeatType" title="repeatType" description="Loop style." />
               <PropsListItem
-                href="#repeatDelay"
+                href={`${Links.animation.transitionProperties}#duration`}
+                title="duration"
+                description="Seconds to run."
+              />
+              <PropsListItem
+                href={`${Links.animation.transitionProperties}#ease`}
+                title="ease"
+                description="Progress curve."
+              />
+              <PropsListItem
+                href={`${Links.animation.transitionProperties}#delay`}
+                title="delay"
+                description="Wait before start."
+              />
+              <PropsListItem
+                href={`${Links.animation.transitionProperties}#repeat`}
+                title="repeat"
+                description="Times to repeat."
+              />
+              <PropsListItem
+                href={`${Links.animation.transitionProperties}#repeatType`}
+                title="repeatType"
+                description="Loop style."
+              />
+              <PropsListItem
+                href={`${Links.animation.transitionProperties}#repeatDelay`}
                 title="repeatDelay"
                 description="Pause before the next cycle"
               />
             </ul>
           </div>
         </article>
+        {/* Easing Curves */}
+        <article
+          role="article"
+          aria-labelledby="easing-curves"
+          className="mt-6 space-y-2 max-w-4xl mx-auto"
+        >
+          <h3 id="easing-curves" className="heading text-lg mb-2">
+            Easing curves (the soul of tween)
+          </h3>
+          <p className="paragraph">
+            Easing defines how you get from A to B. It shapes the progress of a tween over time,
+            creating different feels. Motion has a few built-in easings, but you can also define
+            custom curves with cubic-bezier or steps functions.
+          </p>
+          <div className="code-block">
+            <CodeHighliter>{`<motion.div ... transition={{type:'tween',ease:'easeInOut/easeIn/backOut/...'}}/>`}</CodeHighliter>
+          </div>
+
+          <ul
+            className="grid grid-cols-3 gap-x-8  space-y-2 list-inside py-2 w-full [&>li>span]:text-sm text-center
+         paragraph leading-normal [&>li]:border-b [&>li]:border-foreground/10 [&>li]:pb-2"
+          >
+            <li>
+              <code className="code">{"'linear'"}</code> – steady, constant speed. Robotic, great
+              for loaders.
+            </li>
+            <li>
+              <code className="code">{"'easeIn'"}</code>– starts gently, then accelerates. Builds
+              momentum.
+            </li>
+            <li>
+              <code className="code">{"'easeOut'"}</code> – fast at the start, slows into place.
+              Perfect for UI polish.
+            </li>
+            <li>
+              <code className="code">{"'easeInOut'"}</code> – slow → fast → slow. Balanced, the
+              “default dance” of easing.
+            </li>
+            <li>
+              <code className="code">{"'circIn'"}</code> - very gentle at the start, then
+              accelerates like a marble rolling downhill.
+            </li>
+            <li>
+              <code className="code">{"'circOut'"}</code> – launches quickly, then glides smoothly
+              to a stop.
+            </li>
+            <li>
+              <code className="code">{"'backIn'"}</code> – pulls back slightly before moving
+              forward. Like winding up.
+            </li>
+            <li>
+              <code className="code">{"'backOut'"}</code> – overshoots its target, then settles
+              back. Playful without going full spring.
+            </li>
+            <li>
+              <code className="code">{"'backInOut'"}</code> – combines both: a little wind-up at the
+              start, a playful overshoot at the end.
+            </li>
+            <li>
+              <code className="code">{"'anticipate'"}</code> – winds up in the opposite direction
+              before moving forward. Perfect for expressive, character-like motion.
+            </li>
+            <li>
+              <code className="code">{"cubicBezier(x1, y1, x2, y2)"}</code> – define your own custom
+              curve for complete control and unique motion signatures.
+            </li>
+            <li className="flex items-center justify-center text-foreground font-display text-sm">
+              If not yet explored them all, check out the playground
+              {/* TODO Playground link */}
+            </li>
+          </ul>
+        </article>
+        {/* When to use a tween */}
         <article
           role="article"
           aria-labelledby="When-tween"
@@ -178,7 +274,7 @@ const MotionTransitionPage = () => {
           </h3>
           <ul
             className="list-disc space-y-2 list-inside  py-2 w-full 
-          [&>li>span]:font-display [&>li>span]:text-foreground paragraph"
+          [&>li>span]:font-display [&>li>span]:text-sm [&>li>span]:text-foreground paragraph"
           >
             <li>
               <span>UI choreography</span> - modals, tooltips, menus - where predictability matters
@@ -195,6 +291,14 @@ const MotionTransitionPage = () => {
             </li>
           </ul>
         </article>
+      </section>
+      {/* Spring Transition */}
+      <section
+        id="spring"
+        aria-label="Spring Transition"
+        className="mt-12 max-w-4xl mx-auto bg-background-muted p-6 border-l-4 border-accent/70 rounded-lg rounded-l-none"
+      >
+        <h2 className="heading ">Spring</h2>
       </section>
     </main>
   );

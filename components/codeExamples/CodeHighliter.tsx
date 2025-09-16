@@ -18,6 +18,7 @@ const CodeHighliter = ({ children, inline = false }: { children: string; inline?
         background: "var(--color-code-block-bg)",
         fontSize: 12,
         lineHeight: inline ? "22px" : "18px",
+        fontWeight: inline ? 800 : 600,
         display: inline ? "inline" : "block",
       }}
       codeTagProps={{ style: { background: "transparent" } }}

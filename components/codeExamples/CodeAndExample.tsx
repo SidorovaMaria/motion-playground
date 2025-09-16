@@ -6,11 +6,12 @@ import MotionExample, { MotionExampleProps } from "./MotionExample";
 type CodeAndExampleProps = {
   codeText: string;
   motionProps: MotionExampleProps;
+  className?: string;
 };
-const CodeAndExample = ({ codeText, motionProps }: CodeAndExampleProps) => {
+const CodeAndExample = ({ codeText, motionProps, className }: CodeAndExampleProps) => {
   const { initial, animate, transition } = motionProps;
   return (
-    <div className="grid grid-cols-[2fr_1fr] items-center justify-between">
+    <div className={`grid grid-cols-[2fr_1fr] items-center justify-between ${className}`}>
       <CodeHighliter>{codeText}</CodeHighliter>
       <MotionExample initial={initial} animate={animate} transition={transition} />
     </div>
