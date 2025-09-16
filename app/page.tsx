@@ -164,8 +164,8 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <PathCard
               icon={Sparkles}
-              title="Animations Basics"
-              description="Master x, y, scale, rotate and many more available transformations in Motion with precision."
+              title="Animate & Transitions"
+              description="Start with the fundamentals of animating components and creating smooth transitions."
               link="/animation"
               accentColor="#B20650"
             />
@@ -199,9 +199,9 @@ export default function Home() {
             />
             <PathCard
               icon={Gauge}
-              title="Performance Optimization"
-              description="Learn strategies to ensure your animations run smoothly across all devices, focusing on performance best practices."
-              link="/learn"
+              title="My Examples"
+              description="Below you’ll find example snippets using Framer Motion, each with an explanation. You’re welcome to reuse the code for learning or experimentation, but please credit the source instead of claiming it as your own."
+              link="/examples"
               accentColor="#C20114"
             />
           </div>

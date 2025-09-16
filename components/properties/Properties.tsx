@@ -342,7 +342,7 @@ export function RepeatTypeExamples() {
         <CodeHighliter>{`<motion.div
   animate={{
   rotate: 145,
-  transition: { type: "tween", repeat: Infinity,
+transition: { type: "tween", repeat: Infinity,
    repeatType: "reverse", duration: 1, ease: "easeIn"},
 }}
 />`}</CodeHighliter>
@@ -361,11 +361,9 @@ export function RepeatTypeExamples() {
           }}
         />
         <p className="example-paragraph">
-          <p className="example-paragraph">
-            <code>repeatType: {`"reverse"`}</code> makes each cycle run in the opposite direction.
-            Here the box rotates forward to <code>145°</code>, then back to <code>0°</code>, then
-            forward again. This creates a back-and-forth {`"ping-pong"`} effect.
-          </p>
+          <code>repeatType: {`"reverse"`}</code> makes each cycle run in the opposite direction.
+          Here the box rotates forward to <code>145°</code>, then back to <code>0°</code>, then
+          forward again. This creates a back-and-forth {`"ping-pong"`} effect.
         </p>
       </div>
       {/* Mirror */}

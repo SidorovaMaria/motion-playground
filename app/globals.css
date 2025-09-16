@@ -59,7 +59,7 @@ body {
   );
 }
 @utility code {
-  @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
+  @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-xs text-primary/90 font-mono font-semibold;
 }
 @utility white-shimmer-light {
   background: linear-gradient(
