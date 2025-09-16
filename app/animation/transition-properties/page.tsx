@@ -3,7 +3,9 @@ import {
   DelayExamples,
   DurationExamples,
   EaseExamples,
+  RepeatDelayExamples,
   RepeatExamples,
+  RepeatTypeExamples,
 } from "@/components/properties/Properties";
 
 import PropertyShowcase from "@/components/properties/PropertyShowcase";
@@ -93,16 +95,16 @@ const TransitionProperties = () => {
               <>
                 <ul className=" list-decimal list-inside p-2 text-sm props space-y-2">
                   <li>
-                    <span>String:</span>
+                    <span>String &#10145; </span>
                     <code className="code-a text-xs leading-6 inline">{`"linear" | "easeIn" | "easeOut" | "easeInOut" | "circIn" | "circOut" |  "circInOut" | "backIn" | "backOut" | "backInOut" | "anticipate" `}</code>
                   </li>
                   <li>
-                    <span>Cubic-bezier array: </span>
+                    <span>Cubic-bezier array &#10145; </span>
                     <code className="code-a text-xs leading-6 inline">[x1, y1, x2, y2] </code> (e.g.
                     [0.33, 1, 0.68, 1])
                   </li>
                   <li>
-                    <span>Function: </span>(t: number) &#10153; number (advanced)
+                    <span>Function &#10145; </span>(t: number) &#10153; number (advanced)
                   </li>
                 </ul>
               </>
@@ -158,7 +160,19 @@ const TransitionProperties = () => {
       <TransitionPropertySection
         id="repeat"
         title="Repeat"
-        description={<>{/* TODO */}</>}
+        description={
+          <>
+            <code className="code pl-0">repeat</code> controls how many extra times an animation
+            plays after its first run. By default it runs once (
+            <code className="code">repeat: 0</code>). Setting a number like{" "}
+            <code className="code">2</code> makes it run three times in total, while{" "}
+            <code className="code">Infinity</code> loops it forever. Combine it with{" "}
+            <code className="code">repeatType</code> (<code>loop</code>, <code>reverse</code>, or{" "}
+            <code>mirror</code>) and <code className="code">repeatDelay</code> to shape how each
+            cycle behaves. Great for loaders, pulsing buttons, or any motion that needs to keep
+            going without manual triggers.
+          </>
+        }
         snippet={`<motion.div
   animate={{ scale: 1.1 }}
   transition={{ type: "tween", duration: 0.8, repeat: Infinity }}
@@ -202,6 +216,110 @@ const TransitionProperties = () => {
           },
         ]}
         examples={<RepeatExamples />}
+      />
+      <TransitionPropertySection
+        id="repeatType"
+        title="Repeat Type"
+        description={
+          <>
+            {" "}
+            <code className="code pl-0">repeatType</code> defines <em>how</em> an animation behaves
+            when it repeats. By default it uses <code className="code">{`"loop"`}</code>, which
+            snaps back to the start each cycle. Use <code className="code">{`"reverse"`}</code> to
+            make the animation run backwards every other cycle (a ping-pong effect), or
+            <code className="code">{`"mirror"`}</code> to reverse while also mirroring the easing
+            curve for smoother, more symmetrical motion. Best used with
+            <code className="code">repeat</code> or <code className="code">Infinity</code> to create
+            back-and-forth motions, bouncing effects, or looping loaders that feel polished.
+          </>
+        }
+        snippet={`<motion.div
+  animate={{ scale: 1.1 }}
+  transition={{ type: "tween", duration: 0.8, repeat: Infinity }}
+/>`}
+        overview={[
+          {
+            label: "What",
+            content: <>How repeats play.</>,
+          },
+          { label: "Default", content: <code className="code-a">{'"loop"'}</code> },
+          {
+            label: "Options",
+            content: (
+              <>
+                <ul className=" list-decimal list-inside p-2 text-sm props space-y-2 [&>li>span]:text-secondary">
+                  <li>
+                    <span>{`"loop"`} &#10145; </span>
+                    Repeats the animation from the start.
+                  </li>
+                  <li>
+                    <span>{`"reverse"`} &#10145; </span>
+                    Alternates between forward and backwards playback.
+                  </li>
+                  <li>
+                    <span>{`"mirror"`} &#10145; </span>Switches animation origin and target on each
+                    iteration.
+                  </li>
+                </ul>
+              </>
+            ),
+          },
+
+          {
+            label: "Gotchas",
+            content: (
+              <>
+                Needs repeat to do anything. Not all transitions support it equally, since spring
+                physics don’t naturally “ping-pong.”
+              </>
+            ),
+          },
+        ]}
+        examples={<RepeatTypeExamples />}
+      />
+      <TransitionPropertySection
+        id="repeatDelay"
+        title="Repeat Delay"
+        description={<>{/* TODO */}</>}
+        snippet={`<motion.div
+  animate={{ rotate: 360 }}
+  transition={{
+    type: "tween",
+    duration: 1.2,
+    repeat: Infinity,
+    repeatDelay: 0.4,
+    ease: "linear",
+  }}
+/>`}
+        overview={[
+          {
+            label: "What",
+            content: <>Pause between repeats (seconds).</>,
+          },
+          { label: "Default", content: <code className="code-a">{"0"}</code> },
+          {
+            label: "Options",
+            content: (
+              <>
+                Any number <code className="code-a">≥ 0</code>
+              </>
+            ),
+          },
+
+          {
+            label: "Gotchas",
+            content: (
+              <>
+                Doesn&apos;t affect the first playthrough, only repeats. Works only with
+                tween/keyframes. Counts towards total time, If you set{" "}
+                <code className="code-a">duration: 1.2 </code>and{" "}
+                <code className="code-a">repeatDelay: 0.4 </code>, each cycle effectively lasts
+                1.6s. No negative values. Spring don’t support it well.
+              </>
+            ),
+          },
+        ]}
+        examples={<RepeatDelayExamples />}
       />
     </main>
   );

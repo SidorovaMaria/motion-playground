@@ -258,7 +258,7 @@ export function DelayExamples() {
 
 export function RepeatExamples() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Basic 2 times*/}
       <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
         <CodeHighliter>{`<motion.div
@@ -277,25 +277,7 @@ export function RepeatExamples() {
           it again twice before stopping.
         </p>
       </div>
-      {/* REverse direction each cycle */}
-      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
-        <CodeHighliter>{`<motion.div
-  animate={{ x: 50 }}
-  transition={{ type: "tween", duration: 0.6,
-   repeat: 3, repeatType: "reverse" }}
-/>`}</CodeHighliter>
-        <MotionExample
-          size="small"
-          initial={{ x: 0 }}
-          animate={{ x: 50 }}
-          transition={{ type: "tween", duration: 0.6, repeat: 3, repeatType: "reverse" }}
-        />
-        <p className="example-paragraph">
-          Adding <code>repeatType: {"reverse"}</code> makes each cycle play in the opposite
-          direction. These box moves 4 times(1 original + 3 repeats), alternating right then left.
-          This creates a natural back-and-forth motion instead of always snapping back to the start.
-        </p>
-      </div>
+      {/* Infinite Cycle */}
       <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
         <CodeHighliter>{`<motion.div
  initial={{ rotate: 0 }}
@@ -317,6 +299,206 @@ export function RepeatExamples() {
           only runs while
           <code>animate</code> is active. Once you toggle it off, the animation stops
           cleanly—perfect for start/stop controls or play–pause buttons.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function RepeatTypeExamples() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Loop */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{
+  rotate: 145,
+  transition: { type: "tween", repeat: Infinity,
+   repeatType: "loop", duration: 1, ease: "easeIn"},
+}}
+/>`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            rotate: 145,
+            transition: {
+              type: "tween",
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 1,
+              ease: "easeIn",
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          <code>repeatType: {`"loop"`}</code> is the default. After each run, the animation snaps
+          back to its starting point and plays again. With <code>repeat: Infinity</code>, the box
+          keeps rotating to <code>145°</code>, resetting instantly each cycle.
+        </p>
+      </div>
+      {/* Reverse */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{
+  rotate: 145,
+  transition: { type: "tween", repeat: Infinity,
+   repeatType: "reverse", duration: 1, ease: "easeIn"},
+}}
+/>`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            rotate: 145,
+            transition: {
+              type: "tween",
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 1,
+              ease: "easeIn",
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          <p className="example-paragraph">
+            <code>repeatType: {`"reverse"`}</code> makes each cycle run in the opposite direction.
+            Here the box rotates forward to <code>145°</code>, then back to <code>0°</code>, then
+            forward again. This creates a back-and-forth {`"ping-pong"`} effect.
+          </p>
+        </p>
+      </div>
+      {/* Mirror */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{
+  rotate: 145,
+  transition: { type: "tween", repeat: Infinity,
+   repeatType: "mirror", duration: 1, ease: "linear"},
+}}
+/>`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            rotate: 145,
+            transition: {
+              type: "tween",
+              repeat: Infinity,
+              repeatType: "mirror",
+              duration: 1,
+              ease: "easeIn",
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          <code>repeatType: {`"mirror"`}</code> is like reverse, but it also mirrors the easing
+          curve. That means the forward and backward motion feel identical—smooth and symmetrical.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function RepeatDelayExamples() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Basic Example */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{ rotate: 360,
+  transition:{
+    type: "tween",
+    duration: 1.2,
+    repeat: Infinity,
+    repeatDelay: 2,
+    ease: "easeIn",
+  }} />
+`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            rotate: 360,
+            transition: {
+              type: "tween",
+              duration: 1.2,
+              repeat: Infinity,
+              repeatDelay: 2,
+              ease: "easeIn",
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          This spin uses <code>repeat: Infinity</code> with a <code>repeatDelay: 2</code>. The box
+          rotates 360° in <code>1.2s</code>, then pauses for 2 seconds before starting the next
+          cycle.
+        </p>
+      </div>
+      {/* Reverse with delay  */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{ x: 100,
+  transition:{
+    type: "tween",
+    duration: 0.8,
+    repeat: 3,
+    repeatType: "reverse",
+    repeatDelay: 0.5,
+    ease: "easeInOut",
+}}
+/>
+`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            x: 100,
+            transition: {
+              type: "tween",
+              duration: 0.8,
+              repeat: 3,
+              repeatType: "reverse",
+              repeatDelay: 0.5,
+              ease: "easeInOut",
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          With <code>repeatType: {`"reverse"`}</code>, the box moves right in <code>0.8s</code>,
+          waits <code>0.5s</code>, then moves back left. That pause exaggerates the back-and-forth
+          “ping-pong” feel instead of a seamless swing.
+        </p>
+      </div>
+      {/* Keyframes with delay */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{ x: [0, -30, 100, 0],
+    transition:{
+      duration: 1,
+      repeat: Infinity,
+      repeatDelay: 0.6,
+      ease: "easeInOut",
+}}
+/>
+`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ rotate: 0 }}
+          animate={{
+            x: [0, -50, 50, 0],
+            transition: {
+              duration: 1,
+              ease: "easeInOut",
+              repeat: Infinity,
+              repeatDelay: 0.6,
+            },
+          }}
+        />
+        <p className="example-paragraph">
+          Here the box follows a keyframe path <code>[0 → -50 → 50 → 0]</code> in <code>1s</code>,
+          then pauses <code>0.6s</code> before repeating. The delay adds rhythm to the loop—more
+          like a bounce with a breath between hops than a constant oscillation.
         </p>
       </div>
     </div>
