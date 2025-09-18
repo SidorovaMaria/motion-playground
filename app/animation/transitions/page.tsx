@@ -3,7 +3,16 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, MotionConfig, useInView, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { ArrowUpRightFromSquare, ChevronDown, Loader } from "lucide-react";
+import {
+  ArrowUpRightFromSquare,
+  Check,
+  CheckCircle2,
+  ChevronDown,
+  Cross,
+  Loader,
+  X,
+  XCircle,
+} from "lucide-react";
 import PropsListItem from "@/components/cards_tags/PropsListItem";
 import { Links } from "@/utils/links";
 import { usePathname } from "next/navigation";
@@ -12,6 +21,8 @@ import {
   EASE_SOUL_OF_TWEEN,
   KEYFRAME_DANGER,
   MOTION_CONFIG_DANGER,
+  MOTION_CONFIG_PROPERTIES,
+  MOTION_CONFIG_REDUCED_MOTION,
   SPRING_DANGER,
   SPRING_PROPERTIES,
   TRANSFORM_ORIGIN_DANGER,
@@ -675,6 +686,7 @@ const Transitions = () => {
   <App />
 </MotionConfig>`}</CodeHighliter>
         </LazyMount>
+        {/* Core Idea */}
         <InViewArticle
           id="what-is-motion-config"
           ariaLabelledby="what-is-motion-config"
@@ -729,6 +741,90 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
+        {/* Properties */}
+        <InViewArticle
+          id="motion-config-properties"
+          ariaLabelledby="motion-config-properties"
+          title="MotionConfig properties"
+        >
+          <div className="space-y-2">
+            <p className="paragraph">
+              <code className="code">MotionConfig</code> has three key properties that let you
+              control how animations behave across everything inside it. These are:
+            </p>
+            <ul className="list-disc space-y-2 list-inside  w-full text-left">
+              {MOTION_CONFIG_PROPERTIES.map((item) => (
+                <PropsListItem
+                  key={item.property}
+                  href={
+                    "link" in item && item.link
+                      ? `${Links.animation.motionTransition}${item.link}`
+                      : undefined
+                  }
+                  title={item.property}
+                  description={item.description}
+                />
+              ))}
+            </ul>
+          </div>
+          <div className="mt-4 space-y-2" id="reducedMotion">
+            <h4 className="font-display text-lg">Reduced Motion</h4>
+            <p className="paragraph">
+              One of MotionConfig’s most important jobs is respecting Reduced Motion. It accepts
+              three modes:
+            </p>
+            <ul role="list" className="mt-4 space-y-4 ">
+              {MOTION_CONFIG_REDUCED_MOTION.map((item) => (
+                <li key={item.function} className="pl-6 ">
+                  <div className="flex flex-col gap-1">
+                    <p className="font-display text-sm font-semibold text-foreground">
+                      {`"${item.function}"`}
+                    </p>
+                    <p className="text-sm text-foreground/80">{codeFromBackticks(item.content)}</p>
+                  </div>
+
+                  {/* Pros / Cons chips */}
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {item.advantage && (
+                      <div className="inline-flex items-center gap-2 rounded-lg border border-green-400/20 bg-green-500/10 px-2.5 py-1.5 text-sm text-green-400">
+                        <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden />
+                        <span className="text-justify">{item.advantage}</span>
+                      </div>
+                    )}
+
+                    {"disadvantage" in item && item.disadvantage && (
+                      <div className="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-400/10 px-2.5 py-1.5 text-sm text-red-400">
+                        <XCircle className="h-4 w-4 shrink-0" aria-hidden />
+                        <span className="text-justify">{item.disadvantage}</span>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div id="nonce" className="mt-4 space-y-2">
+            <h4 className="font-display text-lg">Nonce</h4>
+            <p className="paragraph">
+              Unlike <code>transition</code> and <code>reducedMotion</code>, the nonce prop isn’t
+              about feel or accessibility — it’s about security. Specifically, it helps Motion work
+              inside environments with a strict <b>Content Security Policy (CSP).</b>
+            </p>
+            <p className="paragraph">
+              CSP is a browser feature that prevents malicious scripts/styles from running by
+              blocking inline code unless it has a trusted signature. Motion generates inline styles
+              dynamically (to power animations), and without a nonce those styles can get blocked.
+            </p>
+            <p className="paragraph">
+              The <code>nonce</code> is a unique one-time token (usually generated by your server
+              for each request). By passing it to MotionConfig, Motion attaches it to the runtime
+              <code> {`<style>`}</code> tags it injects. This way, the browser knows those styles
+              are allowed, and your animations keep running.
+            </p>
+          </div>
+        </InViewArticle>
+
+        {/* When to use motion config */}
         <InViewArticle
           id="when-motion-config"
           ariaLabelledby="when-motion-config"
@@ -745,6 +841,7 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
+        {/* What to look out for with spring */}
         <InViewArticle
           id="spring-look-out-for"
           ariaLabelledby="spring-look-out-for"

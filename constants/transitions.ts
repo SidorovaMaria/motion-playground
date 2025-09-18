@@ -11,7 +11,7 @@ export type DangerSection = {
 export type PropertyItem = {
   property: string;
   description: string;
-  link?: string; // optional — some sections don't link out
+  link?: string;
 };
 
 export type EaseDef = {
@@ -338,17 +338,23 @@ const KEYFRAME_DANGER = [
 ] as const satisfies DangerSection[];
 
 const MOTION_CONFIG_PROPERTIES = [
-  { property: "transition", description: "fallback for all child motions (duration, easing, etc." },
+  {
+    property: "transition",
+
+    description: "fallback for all child motions (duration, easing, etc.",
+  },
   {
     property: "reducedMotion",
+    link: "#reducedMotion",
     description:
       "global policy for respecting or forcing reduced motion (“user” / “always” / “never”)",
   },
   {
     property: "nonce",
+    link: "#nonce",
     description: "for CSP compliance if needed",
   },
-] as const satisfies PropertyItem[];
+] as const satisfies readonly PropertyItem[];
 
 const WHEN_TO_USE_MOTION_CONFIG = [
   {
@@ -404,6 +410,34 @@ const MOTION_CONFIG_DANGER = [
   },
 ] as const satisfies readonly DangerSection[];
 
+export type PropertiesWith = {
+  function: string;
+  content: string;
+  advantage?: string;
+  disadvantage?: string;
+};
+const MOTION_CONFIG_REDUCED_MOTION = [
+  {
+    function: "user",
+    content:
+      "Follows the user’s system setting `(prefers-reduced-motion)`. If they’ve said reduce, Motion disables transform/layout animations and keeps only safe ones (like opacity).",
+    advantage: "Best default — builds accessibility in without extra work.",
+  },
+  {
+    function: "always",
+    content: "always applies reduced motion (disables all animations)",
+    advantage:
+      "Useful in environments where heavy motion is distracting (dashboards, performance-critical UIs, kiosk apps).",
+    disadvantage: "Removes a lot of polish if your design relies on expressive motion.",
+  },
+  {
+    function: "never",
+    content: "Ignores user preference, always runs full animations.",
+    advantage: "Handy for prototypes, marketing demos, or when you’re stress-testing animations.",
+    disadvantage:
+      "Not recommended for production: it overrides user accessibility choices, which can harm UX.",
+  },
+] as const satisfies PropertiesWith[];
 export {
   EASE_SOUL_OF_TWEEN,
   WHEN_TO_USE_TWEEN,
@@ -421,4 +455,5 @@ export {
   MOTION_CONFIG_PROPERTIES,
   WHEN_TO_USE_MOTION_CONFIG,
   MOTION_CONFIG_DANGER,
+  MOTION_CONFIG_REDUCED_MOTION,
 };
