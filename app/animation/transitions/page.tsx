@@ -76,7 +76,6 @@ const Transitions = () => {
        * Sets reader expectations and internal navigation anchors.
        * If more sections are added, update this overview.
        */}
-      {/* TODO LINKS */}
       <section aria-label="Animation Overview" className="mt-3 max-w-4xl mx-auto">
         <p className="paragraph text-left max-w-3xl ">
           If you’ve tried the playground, you’ve already felt how spring physics and tween easing
@@ -89,6 +88,11 @@ const Transitions = () => {
             Overview of what you&apos;ll learn in this section:
           </p>
           <ul className="grid grid-cols-3 gap-4">
+            {/**
+             * Transition overview cards as links to the specific sections below.
+             * If needed to add more sections, update the TRANSITION_OVERVIEW constant in constants/transitions.ts
+             *
+             */}
             {TRANSITION_OVERVIEW.map(({ title, link, description }) => (
               <Link
                 role="listitem"
@@ -107,7 +111,11 @@ const Transitions = () => {
           </ul>
         </div>
       </section>
-      {/* Transition Types */}
+      {/* /**
+       * Transition Types
+       * One-liner mental model: tween = time-based curve, spring = physics, inertia = momentum (later).
+       * The code fence shows the API shape; demos below do the teaching.
+       */}
       <section aria-label="Transition Types" className="mt-12 max-w-4xl mx-auto ">
         <h2 className="heading ">Transition Types</h2>
         <LazyMount block="code">
@@ -130,7 +138,12 @@ const Transitions = () => {
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div ... transition={{type:'tween'}}/>`}</CodeHighliter>
         </LazyMount>
-        {/* What is a tween */}
+        {/**
+         * Tween: concept intro
+         * Keep the concept separate from props to reduce cognitive load:
+         * - Concept = frames between A → B
+         * - Props = duration/ease/repeat
+         */}
         <InViewArticle
           id="what-is-tween"
           ariaLabelledBy="what-is-tween"
@@ -159,7 +172,12 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
-        {/* Core props of a tween */}
+        {/* /**
+         * Tween core props
+         * Example intentionally uses both position and meta controls (delay, repeat) to show breadth.
+         * PropsListItem pulls descriptions from constants to ensure consistency across the site.
+         * Direct to the docs for deeper dives on each prop.
+         */}
         <InViewArticle
           id="tween-core-props"
           ariaLabelledBy="tween-core-props"
@@ -210,7 +228,11 @@ const Transitions = () => {
             </ul>
           </div>
         </InViewArticle>
-        {/* Tween Easing Curves */}
+        {/**
+         * Easing guide
+         * What each easing feels like.
+         *
+         */}
         <InViewArticle
           ariaLabelledBy="easing-curves"
           id="easing-curves"
@@ -239,7 +261,10 @@ const Transitions = () => {
             </li>
           </ul>
         </InViewArticle>
-        {/* When to use a tween */}
+        {/**
+         * Tween: usage
+         * When to use
+         */}
         <InViewArticle
           id="when-tween"
           ariaLabelledBy="when-tween"
@@ -256,7 +281,10 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
-        {/* Tween dangers */}
+        {/**
+         * Tween: dangers
+         * What to look out for when using tween, what might go wrong.
+         */}
         <InViewArticle
           id="tween-look-out-for"
           ariaLabelledBy="tween-look-out-for"
@@ -276,13 +304,20 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
+      {/* END TWEEN */}
 
       {/* SPRING */}
       <InViewSection id="spring" aria-label="Spring Transitions" title="Spring">
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div ... transition={{type:'spring'}}/>`}</CodeHighliter>
         </LazyMount>
-        {/* Spring Physics */}
+        {/**
+         * Spring: concept intro
+         * Two modes:
+         * - Physics mode (stiffness/damping/mass/velocity) → interactive feel.
+         * - Duration mode (duration/bounce) → predictable timing with spring character.
+         * Default for transforms is spring: feels “alive” out of the box.
+         */}
         <InViewArticle
           id="spring-physics"
           ariaLabelledBy="spring-physics"
@@ -327,7 +362,12 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
-        {/* SPRING CORE */}
+        {/**
+         * Spring core props
+         * The demo uses physics mode for educational value. Duration/bounce are commented in as hints.
+         * PropsListItem pulls descriptions from constants to ensure consistency across the site.
+         * Direct to the docs for deeper dives on each prop.
+         */}
         <InViewArticle
           id="spring-core-props"
           ariaLabelledBy="spring-core-props"
@@ -379,7 +419,13 @@ const Transitions = () => {
           </div>
         </InViewArticle>
 
-        {/* When to use spring */}
+        {/**
+         * Spring: usage
+         * Rule of thumb:
+         * - Movement (x/y/scale/rotate) → spring
+         * - Visibility (opacity) → tween
+         * Physics note: stiffness × mass ≈ frequency, damping controls overshoot/settling.
+         */}
         <InViewArticle
           id="when-spring"
           ariaLabelledBy="when-spring"
@@ -396,6 +442,13 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
+        {/**
+         * Spring: pitfalls
+         * Common issues to watch out for:
+         * - Overusing spring for everything can lead to a sluggish feel.
+         * - Not accounting for gesture velocity can make interactions feel disconnected.
+         * - Using spring for opacity changes can lead to unexpected results.
+         */}
         <InViewArticle
           id="spring-look-out-for"
           ariaLabelledBy="spring-look-out-for"
@@ -415,7 +468,9 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
-      {/* Transform Origin */}
+      {/* END SPRING */}
+
+      {/* TRANSFORM ORIGIN */}
       <InViewSection
         id="transform-origin"
         aria-labelledby="transform-origin"
@@ -424,7 +479,11 @@ const Transitions = () => {
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div style={{ originX: 0.5 }} />`}</CodeHighliter>
         </LazyMount>
-        {/* What is transform origin */}
+        {/**
+         * Transform Origin
+         * Not an animation type—just the pivot for scale/rotate/skew.
+         * Small intro on what it is and why we might want to change it.
+         */}
         <InViewArticle
           id="what-is-transform-origin"
           ariaLabelledBy="what-is-transform-origin"
@@ -440,7 +499,11 @@ const Transitions = () => {
             <p>No movement on its own, just a reference point for transforms.</p>
           </div>
         </InViewArticle>
-        {/* Core props of transform origin */}
+        {/**
+         * Transform origin core props
+         * Example shows a hinge effect by rotating from left edge.
+         * PropsListItem pulls descriptions from constants to ensure consistency across the site.
+         * No direct link to docs, as these are no other use for these props.*/}
         <InViewArticle
           id="transform-origin-props"
           ariaLabelledBy="transform-origin-props"
@@ -475,7 +538,13 @@ const Transitions = () => {
             </ul>
           </div>
         </InViewArticle>
-        {/* When to use transform origin */}
+        {/**
+         * Transform origin: usage
+         * When to use
+         * - You want to change the pivot point of a transform
+         * - You need more control over the animation's origin
+         * - You want to create more complex animations
+         */}
         <InViewArticle
           id="when-transform-origin"
           ariaLabelledBy="when-transform-origin"
@@ -492,7 +561,10 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
-        {/* Dangers with transform origin */}
+        {/**
+         * Transform origin: dangers
+         * What to look out for when using transform origin, what might go wrong.
+         */}
         <InViewArticle
           id="transform-origin-look-out-for"
           ariaLabelledBy="transform-origin-look-out-for"
@@ -512,7 +584,9 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
-      {/* Per Value Overrides */}
+      {/* END TRANSFORM ORIGIN */}
+
+      {/* PER VALUE OVERRIDES */}
       <InViewSection
         id="per-value-overrides"
         aria-labelledby="per-value-overrides"
@@ -525,6 +599,11 @@ const Transitions = () => {
     }
   />`}</CodeHighliter>
         </LazyMount>
+        {/**
+         * Core idea of how one will use per-value overrides
+         * Example shows a spring for position and a quick linear tween for opacity.
+         * Paragraph explains what happenes in the example.
+         */}
         <InViewArticle
           id="core-props-per-value-overrides"
           ariaLabelledBy="core-props-per-value-overrides"
@@ -573,6 +652,12 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
+        {/** Per Value overrides: Usage
+         * When to use per-value overrides
+         * Examples include, hierarchy, staggered animations, mixed property types.
+         *
+         */}
+
         <InViewArticle
           id="when-overridden"
           ariaLabelledBy="when-per-value-overrides"
@@ -590,6 +675,7 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
+      {/* END PER VALUE OVERRIDES */}
       {/* KEYFRAMES */}
       <InViewSection
         id="keyframes"
@@ -599,6 +685,12 @@ const Transitions = () => {
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div ... transition={{times:[0,0.2,0.5,1], ease:['easeIn','easeOut','easeInOut']}}/>`}</CodeHighliter>
         </LazyMount>
+        {/**
+         * Keyframes
+         * Allows multi-step motion and timing via `times` (0..1).
+         * Example shows a y animation with multiple waypoints and easing curves.
+         * Paragraph explains what happens in the example.
+         */}
         <InViewArticle id="keyframes-core" ariaLabelledBy="keyframes-core" title="Core idea">
           <div className="paragraph space-y-2">
             <p>
@@ -653,7 +745,10 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
-        {/* When to use keyframes */}
+        {/**
+         * Keyframes: usage
+         * When would someone want to use keyframes?
+         */}
         <InViewArticle
           id="when-keyframes"
           ariaLabelledBy="when-keyframes"
@@ -670,7 +765,10 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
-        {/* Dangers with keyframes */}
+        {/**
+         * Keyframes: dangers
+         * What to look out for when using keyframes, what might go wrong.
+         */}
         <InViewArticle
           id="keyframes-look-out-for"
           ariaLabelledBy="keyframes-look-out-for"
@@ -690,7 +788,9 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
-      {/* Motion Config */}
+      {/* END KEYFRAMES */}
+
+      {/* MOTION CONFIG */}
       <InViewSection
         id="motion-config"
         aria-labelledby="motion-config"
@@ -701,7 +801,11 @@ const Transitions = () => {
   <App />
 </MotionConfig>`}</CodeHighliter>
         </LazyMount>
-        {/* Core Idea */}
+        {/** CORE Idea of motionConfig
+         * What it is and why we might want to use it.
+         * Example shows two squares with different transition feels: one using the shared defaults from MotionConfig, the other overriding them.
+         * Paragraph explains what happens in the example.
+         */}
         <InViewArticle
           id="what-is-motion-config"
           ariaLabelledBy="what-is-motion-config"
@@ -756,7 +860,13 @@ const Transitions = () => {
             </p>
           </div>
         </InViewArticle>
-        {/* Properties */}
+        {/** MotionConfig properties
+         * The three key props: transition, reducedMotion, nonce.
+         * Reduced motion gets a deeper dive since it’s important for accessibility.
+         * Nonce gets a brief explanation since it’s more niche (CSP).
+         * PropsListItem pulls descriptions from constants to ensure consistency across the site.
+         * Direct to the docs on the same page for deeper dives on each prop.
+         */}
         <InViewArticle
           id="motion-config-properties"
           ariaLabelledBy="motion-config-properties"
@@ -839,7 +949,10 @@ const Transitions = () => {
           </div>
         </InViewArticle>
 
-        {/* When to use motion config */}
+        {/**
+         * MotionConfig: usage
+         * When to use motion config and why it matters.
+         */}
         <InViewArticle
           id="when-motion-config"
           ariaLabelledBy="when-motion-config"
@@ -856,7 +969,10 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
-        {/* What to look out for with spring */}
+        {/**
+         * MotionConfig: dangers
+         * What to look out for when using motion config, what might go wrong.
+         */}
         <InViewArticle
           id="spring-look-out-for"
           ariaLabelledBy="spring-look-out-for"
@@ -876,6 +992,7 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
+      {/* END MOTION CONFIG */}
     </main>
   );
 };
@@ -921,11 +1038,13 @@ const InViewSection = ({
   id: string;
   className?: string;
 }) => {
+  // Reduced-motion: disable entrance motion; keep state transitions instant.
   const prefersReduced = useReducedMotion();
   const baseTransition = prefersReduced
     ? { duration: 0 }
     : ({ type: "tween" as const, duration: 0.5, ease: ["easeInOut"] } as Transition);
   const pathname = usePathname(); // make the key per-page
+  // Persist open/closed state per-page; safe for route changes.
   const storageKey = `mp:section:${pathname}:${id}`;
   const [open, setOpen] = usePersistentBoolean(storageKey, defaultOpen);
 
@@ -986,6 +1105,12 @@ const InViewSection = ({
     </motion.section>
   );
 };
+/**
+ * <InViewArticle/>
+ * Smaller content unit revealed when scrolled into view.
+ * - Same entrance semantics as <InViewSection> for consistency.
+ * - Use for conceptual chunks, not interactive state.
+ */
 const InViewArticle = ({
   title,
   children,
@@ -1000,6 +1125,7 @@ const InViewArticle = ({
   id: string;
   className?: string;
 }) => {
+  // Reduced-motion: disable entrance motion; keep state transitions instant.
   const prefersReduced = useReducedMotion();
   return (
     <motion.article
