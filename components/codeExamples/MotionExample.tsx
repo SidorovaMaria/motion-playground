@@ -3,6 +3,7 @@ import React from "react";
 import {
   AnimatePresence,
   motion,
+  MotionStyle,
   TargetAndTransition,
   Transition,
   VariantLabels,
@@ -15,8 +16,16 @@ export type MotionExampleProps = {
   transition?: Transition<any> | undefined;
   className?: string;
   size?: "small" | "extra-small";
+  styles?: MotionStyle | undefined;
 };
-const MotionExample = ({ initial, animate, transition, className, size }: MotionExampleProps) => {
+const MotionExample = ({
+  initial,
+  animate,
+  transition,
+  className,
+  size,
+  styles,
+}: MotionExampleProps) => {
   const [useAnimate, setUseAnimate] = React.useState(false);
   return (
     <div
@@ -29,6 +38,7 @@ const MotionExample = ({ initial, animate, transition, className, size }: Motion
           initial={initial}
           animate={useAnimate ? animate : undefined}
           transition={transition}
+          style={styles}
           className={`w-20 h-20 bg-gradient-to-b from-primary to-secondary rounded-lg flex items-center justify-center text-white relative isolate ${
             size && size === "small" && "w-14! h-14! "
           }`}

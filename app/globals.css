@@ -192,6 +192,12 @@ body {
       @apply font-display text-foreground not-italic;
     }
   }
+  .danger-list {
+    @apply space-y-2 list-inside  py-2 w-full
+          [&>li>span]:font-display [&>li>span]:text-sm  [&>li>span]:capitalize  [&>li>span]:text-red-400/90 
+          [&>li]:border-b [&>li]:border-foreground/10 [&>li]:pb-2
+          [&>li>ul]:list-disc [&>li>ul]:list-inside [&>li>ul]:mt-1 [&>li>ul]:ml-4 [&>li>ul]:space-y-1 [&>li>ul]:text-foreground/80 [&>li>ul]:text-sm;
+  }
 }
 
 /*  === ANIMATION === */
