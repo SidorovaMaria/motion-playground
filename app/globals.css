@@ -61,6 +61,9 @@ body {
 @utility code {
   @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-xs text-primary/90 font-mono font-semibold;
 }
+@utility u-paragraph {
+  @apply text-foreground/80 text-base font-medium tracking-wide;
+}
 @utility white-shimmer-light {
   background: linear-gradient(
     90deg,
@@ -79,6 +82,9 @@ body {
   }
   .paragraph {
     @apply text-foreground/80 text-base font-medium tracking-wide;
+    code {
+      @apply text-xs code p-0;
+    }
   }
   .example-paragraph {
     @apply text-foreground/80 font-medium tracking-wide leading-[1.35] text-sm mt-4 text-center [&>code]:text-xs [&>code]:code [&>code]:p-0;
@@ -193,10 +199,10 @@ body {
     }
   }
   .danger-list {
-    @apply space-y-2 list-inside  py-2 w-full
+    @apply space-y-2 list-inside w-full
           [&>li>span]:font-display [&>li>span]:text-sm  [&>li>span]:capitalize  [&>li>span]:text-red-400/90 
-          [&>li]:border-b [&>li]:border-foreground/10 [&>li]:pb-2
-          [&>li>ul]:list-disc [&>li>ul]:list-inside [&>li>ul]:mt-1 [&>li>ul]:ml-4 [&>li>ul]:space-y-1 [&>li>ul]:text-foreground/80 [&>li>ul]:text-sm;
+          [&>li]:border-b [&>li]:border-foreground/10 [&>li]:pb-1
+          [&>li>ul]:list-disc [&>li>ul]:list-inside [&>li>ul]:mt-1 [&>li>ul]:ml-2 [&>li>ul]:space-y-1 [&>li>ul]:u-paragraph [&>li>ul]:text-sm;
   }
 }
 
