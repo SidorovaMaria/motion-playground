@@ -83,7 +83,7 @@ body {
   .paragraph {
     @apply text-foreground/80 text-base font-medium tracking-wide;
     code {
-      @apply text-xs code p-0;
+      @apply text-xs code p-0 pr-1;
     }
   }
   .example-paragraph {

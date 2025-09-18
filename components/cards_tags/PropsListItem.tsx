@@ -7,7 +7,7 @@ type Props = {
 };
 const PropsListItem = ({ href, title, description }: Props) => {
   return (
-    <li className="font-sans font-bold text-base ">
+    <li className="font-bold u-paragraph text-sm ">
       <span className="text-accent font-display">{title}</span> - {description}
       {href && (
         <a href={href} className=" items-center justify-center inline">
