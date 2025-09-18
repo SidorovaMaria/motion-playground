@@ -2,6 +2,7 @@
 import CodeAndExample from "@/components/codeExamples/CodeAndExample";
 import CodeHighliter from "@/components/codeExamples/CodeHighliter";
 import MotionExample from "@/components/codeExamples/MotionExample";
+import { Links } from "@/utils/links";
 import { revealSpanVariant } from "@/variants/buttonVariants";
 import { motion } from "framer-motion";
 import { ArrowRight, Code } from "lucide-react";
@@ -386,7 +387,7 @@ const AnimationPage = () => {
         whileHover="hovered"
         whileFocus="hovered"
         animate="rest"
-        onClick={() => router.push("/animation/motion-transition")}
+        onClick={() => router.push(Links.animation.motionTransition)}
         className="primary-button flex items-center text-base font-display tracking-wide font-normal p-4! mx-auto w-full max-w-4xl rounded-md mt-12 "
       >
         <p>Deep dive Into the Motion Transition </p>

@@ -200,7 +200,7 @@ export default function Home() {
             <PathCard
               icon={Gauge}
               title="My Examples"
-              description="Below you’ll find example snippets using Framer Motion, each with an explanation. You’re welcome to reuse the code for learning or experimentation, but please credit the source instead of claiming it as your own."
+              description="Below you’ll find example snippets using Framer Motion, each with an explanation."
               link="/examples"
               accentColor="#C20114"
             />

@@ -30,7 +30,7 @@
     --color-bg-muted: #111827cc;
     --color-code-block-bg: #0a1e32fa;
     --color-primary-100: #43b4e5;
-    --color-secondary-100: #0fdca9;
+    --color-secondary-100: #0ba57f;
     --color-accent-100: #f8e025;
   }
 }
@@ -39,6 +39,9 @@
 body {
   background-color: var(--color-bg);
   @apply text-foreground font-sans font-semibold;
+}
+html {
+  scroll-behavior: smooth;
 }
 
 @utility text-gradient {

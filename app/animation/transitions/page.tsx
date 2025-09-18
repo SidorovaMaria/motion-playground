@@ -1,21 +1,22 @@
 "use client";
+/**
+ * Transitions (Motion) — teaching page
+ *
+ * Purpose:
+ * - Explain Motion transitions (tween, spring, keyframes, per-value overrides, transform origin).
+ * - Provide runnable micro-demos via <MotionExample/> and animate properties as a copy-paste code via <CodeHighliter/>.
+ * - Respect reduced-motion and keep perf sensible with lazy/conditional rendering.
+ *
+ */
+
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef, useState } from "react";
-import { motion, MotionConfig, useInView, useReducedMotion } from "motion/react";
+import React, { useRef } from "react";
+import { motion, MotionConfig, Transition, useInView, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import {
-  ArrowUpRightFromSquare,
-  Check,
-  CheckCircle2,
-  ChevronDown,
-  Cross,
-  Loader,
-  X,
-  XCircle,
-} from "lucide-react";
+import { ArrowUpRightFromSquare, CheckCircle2, ChevronDown, Loader, XCircle } from "lucide-react";
 import PropsListItem from "@/components/cards_tags/PropsListItem";
 import { Links } from "@/utils/links";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { usePersistentBoolean } from "@/utils/usePersistentBoolean";
 import {
   EASE_SOUL_OF_TWEEN,
@@ -27,6 +28,7 @@ import {
   SPRING_PROPERTIES,
   TRANSFORM_ORIGIN_DANGER,
   TRANSFORM_ORIGIN_PROPERTIES,
+  TRANSITION_OVERVIEW,
   TWEEN_DANGER,
   TWEEN_PROPERTIES,
   WHEN_KEYFRAMES,
@@ -37,7 +39,6 @@ import {
   WHEN_TRANSFORM_ORIGIN,
 } from "@/constants/transitions";
 import { codeFromBackticks } from "@/utils/textFormat";
-import { animate } from "motion";
 
 //Lazy loading for extra components
 const CodeHighliter = dynamic(() => import("@/components/codeExamples/CodeHighliter"), {
@@ -48,6 +49,18 @@ const MotionExample = dynamic(() => import("@/components/codeExamples/MotionExam
   ssr: false,
   loading: () => <div className="h-24 w-full animate-pulse rounded-md bg-foreground/5" />,
 });
+
+/**
+ * <Transitions/>
+ * Top-level page that stitches together narrative sections and demos.
+ * - Uses semantic landmarks (<main>, <section>, <article>) for screen readers.
+ * - Keeps headings strictly h1 → h2 → h3 for accessible outline.
+ * - All heavy code blocks and demos are lazy to reduce TTI and layout thrash.
+ *
+ * Authoring guide:
+ * - When adding a new subsection, prefer <InViewSection> → <InViewArticle> nesting.
+ * - Link to constants in "@/constants/transitions" to keep prose and lists single-sourced.
+ */
 const Transitions = () => {
   return (
     <main className="relative max-w-7xl mx-auto px-10 py-12">
@@ -58,7 +71,11 @@ const Transitions = () => {
           snippets.
         </p>
       </header>
-      {/* Animation Overview */}
+      {/* /**
+       * Animation Overview
+       * Sets reader expectations and internal navigation anchors.
+       * If more sections are added, update this overview.
+       */}
       {/* TODO LINKS */}
       <section aria-label="Animation Overview" className="mt-3 max-w-4xl mx-auto">
         <p className="paragraph text-left max-w-3xl ">
@@ -71,31 +88,22 @@ const Transitions = () => {
           <p className="font-display text-sm ">
             Overview of what you&apos;ll learn in this section:
           </p>
-          <ul className="list-disc list-inside space-y-1 text-base text-foreground/80 font-bold">
-            <li>
-              Transition types — what is{" "}
-              <Link href="#spring">
-                <code className="code">spring </code>
+          <ul className="grid grid-cols-3 gap-4">
+            {TRANSITION_OVERVIEW.map(({ title, link, description }) => (
+              <Link
+                role="listitem"
+                href={link}
+                key={title}
+                className="px-4 py-1.5 rounded-md border border-foreground/20 font-display text-sm 
+                   text-foreground/90 font-medium hover:border-accent 
+                   transition-colors duration-200 capitalize flex flex-col items-center gap-2 last:col-span-3 group"
+              >
+                <p className="group-hover:underline text-primary">{title}</p>
+                <p className="font-sans text-xs  text-center font-medium tracking-wide">
+                  {description}
+                </p>
               </Link>
-              /
-              <Link href="#tween">
-                <code className="code">tween</code>
-              </Link>
-              <span className="opacity-75 text-xs ">
-                ( Inertia exists too; we’ll hit it when we learn drag.)
-              </span>
-            </li>
-            <li>Changing transform Origin</li>
-            <li>Per-value overrides - Mix feels per property</li>
-            <li>
-              Keyframes basics - Multi-step motion with arrays (and optional{" "}
-              <code className="code">times</code>) for staged changes.
-            </li>
-
-            <li>
-              Project defaults with <code className="code">MotionConfig</code> - Set app-wide
-              transition defaults (and respect user preferences like reduced motion) in one place.
-            </li>
+            ))}
           </ul>
         </div>
       </section>
@@ -125,14 +133,14 @@ const Transitions = () => {
         {/* What is a tween */}
         <InViewArticle
           id="what-is-tween"
-          ariaLabelledby="what-is-tween"
+          ariaLabelledBy="what-is-tween"
           title='What a "tween" actually is'
         >
-          <div className="[&>p]:text-base! [&>p]:u-paragraph spacey-y-1">
+          <div className="[&>p]:text-base! [&>p]:u-paragraph space-y-1">
             <p>
               <span className="font-bold">&quot;Tween&quot;</span> is short for{" "}
               <span className="italic font-bold">in-betweening</span> — the old animation term for
-              drawing the frames between two key poses. In Motion, a tween transitoin simply says:{" "}
+              drawing the frames between two key poses. In Motion, a tween transition simply says:{" "}
               <em>
                 I&lsquo;ll handle the frames between start and finish over a set time with a chosen
                 easing function.
@@ -154,7 +162,7 @@ const Transitions = () => {
         {/* Core props of a tween */}
         <InViewArticle
           id="tween-core-props"
-          ariaLabelledby="tween-core-props"
+          ariaLabelledBy="tween-core-props"
           title="Core properties of a tween"
         >
           <div className="grid grid-cols-1 gap-3 items-center lg:grid-cols-3 ">
@@ -204,7 +212,7 @@ const Transitions = () => {
         </InViewArticle>
         {/* Tween Easing Curves */}
         <InViewArticle
-          ariaLabelledby="easing-curves"
+          ariaLabelledBy="easing-curves"
           id="easing-curves"
           title="Easing curves (the soul of tween)"
         >
@@ -234,7 +242,7 @@ const Transitions = () => {
         {/* When to use a tween */}
         <InViewArticle
           id="when-tween"
-          ariaLabelledby="when-tween"
+          ariaLabelledBy="when-tween"
           title="When to reach for a tween"
         >
           <ul
@@ -251,7 +259,7 @@ const Transitions = () => {
         {/* Tween dangers */}
         <InViewArticle
           id="tween-look-out-for"
-          ariaLabelledby="tween-look-out-for"
+          ariaLabelledBy="tween-look-out-for"
           title="What to look out for with tween"
         >
           <ul className="danger-list">
@@ -277,7 +285,7 @@ const Transitions = () => {
         {/* Spring Physics */}
         <InViewArticle
           id="spring-physics"
-          ariaLabelledby="spring-physics"
+          ariaLabelledBy="spring-physics"
           title={`What a "spring" actually is`}
         >
           <div className="[&>p]:text-base! paragraph">
@@ -287,12 +295,15 @@ const Transitions = () => {
               toward the target, overshoots, and then settles. Josh Comeau explain it with a great
               example on his{" "}
               <a
-                target="_blank"
                 href="https://www.joshwcomeau.com/animation/a-friendly-introduction-to-spring-physics/"
-                className=" font-bold text-secondary hover:underline"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="A friendly introduction to spring physics by Josh Comeau (opens in a new tab)"
+                className="font-bold text-secondary hover:underline"
               >
-                blog. <ArrowUpRightFromSquare className="inline small-icon text-secondary" />
-              </a>{" "}
+                blog.{" "}
+                <ArrowUpRightFromSquare className="inline small-icon text-secondary" aria-hidden />
+              </a>
               <br />
               That’s why transform properties <code>(x, y, scale, rotate)</code> use spring by
               default — it makes UIs feel natural, not robotic.
@@ -319,7 +330,7 @@ const Transitions = () => {
         {/* SPRING CORE */}
         <InViewArticle
           id="spring-core-props"
-          ariaLabelledby="spring-core-props"
+          ariaLabelledBy="spring-core-props"
           title="Core properties of a spring"
         >
           <div className="grid grid-cols-1 gap-3 items-center lg:grid-cols-[2fr_1fr_2fr] ">
@@ -371,7 +382,7 @@ const Transitions = () => {
         {/* When to use spring */}
         <InViewArticle
           id="when-spring"
-          ariaLabelledby="when-spring"
+          ariaLabelledBy="when-spring"
           title="When to reach for a spring"
         >
           <ul
@@ -387,7 +398,7 @@ const Transitions = () => {
         </InViewArticle>
         <InViewArticle
           id="spring-look-out-for"
-          ariaLabelledby="spring-look-out-for"
+          ariaLabelledBy="spring-look-out-for"
           title="What to look out for with spring"
         >
           <ul className="danger-list">
@@ -413,9 +424,10 @@ const Transitions = () => {
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div style={{ originX: 0.5 }} />`}</CodeHighliter>
         </LazyMount>
+        {/* What is transform origin */}
         <InViewArticle
           id="what-is-transform-origin"
-          ariaLabelledby="what-is-transform-origin"
+          ariaLabelledBy="what-is-transform-origin"
           title=" What “transform origin” means?"
         >
           <div className="[&>p]:text-base! paragraph">
@@ -428,9 +440,10 @@ const Transitions = () => {
             <p>No movement on its own, just a reference point for transforms.</p>
           </div>
         </InViewArticle>
+        {/* Core props of transform origin */}
         <InViewArticle
           id="transform-origin-props"
-          ariaLabelledby="transform-origin-props"
+          ariaLabelledBy="transform-origin-props"
           title="Usage of transform origin"
         >
           <div className="grid grid-cols-1 gap-3 items-center lg:grid-cols-3 ">
@@ -462,9 +475,10 @@ const Transitions = () => {
             </ul>
           </div>
         </InViewArticle>
+        {/* When to use transform origin */}
         <InViewArticle
           id="when-transform-origin"
-          ariaLabelledby="when-transform-origin"
+          ariaLabelledBy="when-transform-origin"
           title=" When to reach for a transform origin"
         >
           <ul
@@ -478,10 +492,11 @@ const Transitions = () => {
             ))}
           </ul>
         </InViewArticle>
+        {/* Dangers with transform origin */}
         <InViewArticle
-          id="tween-look-out-for"
-          ariaLabelledby="tween-look-out-for"
-          title="What to look out for with tween"
+          id="transform-origin-look-out-for"
+          ariaLabelledBy="transform-origin-look-out-for"
+          title="What to look out for with transform origin"
         >
           <ul className="danger-list">
             {TRANSFORM_ORIGIN_DANGER.map((section) => (
@@ -497,7 +512,7 @@ const Transitions = () => {
           </ul>
         </InViewArticle>
       </InViewSection>
-      {/* Per Value Ovverrides */}
+      {/* Per Value Overrides */}
       <InViewSection
         id="per-value-overrides"
         aria-labelledby="per-value-overrides"
@@ -512,10 +527,10 @@ const Transitions = () => {
         </LazyMount>
         <InViewArticle
           id="core-props-per-value-overrides"
-          ariaLabelledby="core-props-per-value-overrides"
+          ariaLabelledBy="core-props-per-value-overrides"
           title="Core idea"
         >
-          <p className="paragraph text-base">
+          <p className="paragraph">
             A transition doesn’t have to be one-size-fits-all. You can give everything a general
             timing and easing, then fine-tune individual properties with their own rules. For
             example, let opacity fade on a quick linear tween while scale bounces on a spring. The
@@ -560,7 +575,7 @@ const Transitions = () => {
         </InViewArticle>
         <InViewArticle
           id="when-overridden"
-          ariaLabelledby="when-per-value-overrides"
+          ariaLabelledBy="when-per-value-overrides"
           title="When to use per-value overrides"
         >
           <ul
@@ -584,7 +599,7 @@ const Transitions = () => {
         <LazyMount block="code">
           <CodeHighliter>{`<motion.div ... transition={{times:[0,0.2,0.5,1], ease:['easeIn','easeOut','easeInOut']}}/>`}</CodeHighliter>
         </LazyMount>
-        <InViewArticle id="keyframes-core" ariaLabelledby="keyframes-core" title="Core idea">
+        <InViewArticle id="keyframes-core" ariaLabelledBy="keyframes-core" title="Core idea">
           <div className="paragraph space-y-2">
             <p>
               Keyframes allow you to animate a property through multiple intermediate values rather
@@ -641,8 +656,8 @@ const Transitions = () => {
         {/* When to use keyframes */}
         <InViewArticle
           id="when-keyframes"
-          ariaLabelledby="when-keyframes"
-          title="When to reach for keyframes"
+          ariaLabelledBy="when-keyframes"
+          title="When to reach for Keyframes"
         >
           <ul
             className="list-disc space-y-2 list-inside  w-full 
@@ -658,8 +673,8 @@ const Transitions = () => {
         {/* Dangers with keyframes */}
         <InViewArticle
           id="keyframes-look-out-for"
-          ariaLabelledby="keyframes-look-out-for"
-          title="What to look out for with keyframes"
+          ariaLabelledBy="keyframes-look-out-for"
+          title="What to look out for with Keyframes"
         >
           <ul className="danger-list">
             {KEYFRAME_DANGER.map(({ title, items }) => (
@@ -689,10 +704,10 @@ const Transitions = () => {
         {/* Core Idea */}
         <InViewArticle
           id="what-is-motion-config"
-          ariaLabelledby="what-is-motion-config"
+          ariaLabelledBy="what-is-motion-config"
           title="Core idea"
         >
-          <p className="paragraph text-base">
+          <p className="paragraph">
             <code>MotionConfig</code> is a top-level wrapper component that lets you define defaults
             and global policies for all <code>motion</code> components inside its tree. Instead of
             repeating transition settings everywhere, you set a baseline once. It also handles
@@ -744,7 +759,7 @@ const Transitions = () => {
         {/* Properties */}
         <InViewArticle
           id="motion-config-properties"
-          ariaLabelledby="motion-config-properties"
+          ariaLabelledBy="motion-config-properties"
           title="MotionConfig properties"
         >
           <div className="space-y-2">
@@ -827,7 +842,7 @@ const Transitions = () => {
         {/* When to use motion config */}
         <InViewArticle
           id="when-motion-config"
-          ariaLabelledby="when-motion-config"
+          ariaLabelledBy="when-motion-config"
           title="When to reach for a motion config"
         >
           <ul
@@ -844,7 +859,7 @@ const Transitions = () => {
         {/* What to look out for with spring */}
         <InViewArticle
           id="spring-look-out-for"
-          ariaLabelledby="spring-look-out-for"
+          ariaLabelledBy="spring-look-out-for"
           title="What to look out for with spring"
         >
           <ul className="danger-list">
@@ -879,12 +894,13 @@ const LazyMount = ({
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true });
   return (
-    <section ref={ref} className={`${className} ${block === "code" && "code-block"}`}>
+    <section ref={ref} className={` ${className} ${block === "code" && "code-block"}`}>
       {inView ? (
         children
       ) : (
-        <div className="flex w-full items-center justify-center h-24 ">
-          <Loader className="animate-spin" />
+        <div className="flex w-full items-center justify-center h-24">
+          <Loader className="animate-spin" aria-hidden />
+          <span className="sr-only">Loading block…</span>
         </div>
       )}
     </section>
@@ -906,6 +922,9 @@ const InViewSection = ({
   className?: string;
 }) => {
   const prefersReduced = useReducedMotion();
+  const baseTransition = prefersReduced
+    ? { duration: 0 }
+    : ({ type: "tween" as const, duration: 0.5, ease: ["easeInOut"] } as Transition);
   const pathname = usePathname(); // make the key per-page
   const storageKey = `mp:section:${pathname}:${id}`;
   const [open, setOpen] = usePersistentBoolean(storageKey, defaultOpen);
@@ -931,18 +950,23 @@ const InViewSection = ({
         className="group flex w-full items-center justify-between cursor-pointer p-6"
       >
         <h2 className="heading">{title}</h2>
-        <ChevronDown
-          className={`w-8 h-8 stroke-4 text-foreground/70 group-hover:text-foreground/100 transition ${
-            open && "rotate-180"
-          }`}
-        />
+        <motion.span
+          aria-hidden
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={
+            prefersReduced ? { duration: 0 } : { type: "spring", stiffness: 200, damping: 10 }
+          }
+        >
+          <ChevronDown className="w-8 h-8 stroke-4 text-foreground/70 group-hover:text-foreground/100" />
+        </motion.span>
       </button>
 
       <motion.div
         id={`${id}-content`}
         initial={false}
         animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-        transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+        transition={baseTransition}
+        style={{ transformOrigin: "top", willChange: "height, opacity" }}
         className="overflow-hidden "
         // onAnimationComplete={() => {
         //   if (open && ref.current) {
@@ -967,11 +991,11 @@ const InViewArticle = ({
   children,
   id,
   className,
-  ariaLabelledby,
+  ariaLabelledBy,
   ...props
 }: {
   title: string;
-  ariaLabelledby: string;
+  ariaLabelledBy: string;
   children: React.ReactNode;
   id: string;
   className?: string;
@@ -980,15 +1004,16 @@ const InViewArticle = ({
   return (
     <motion.article
       id={id}
-      aria-labelledby={ariaLabelledby}
+      aria-labelledby={ariaLabelledBy}
       role="article"
       initial={prefersReduced ? { opacity: 0, y: 0 } : { opacity: 0, y: -25 }}
       whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ type: "spring", stiffness: 50, duration: 0.5 }}
       className={`mt-8 space-y-2 max-w-4xl mx-auto ${className}`}
       {...props}
     >
-      <h3 id={ariaLabelledby} className="heading text-xl mb-4">
+      <h3 id={ariaLabelledBy} className="heading text-xl mb-4">
         {title}
       </h3>
 

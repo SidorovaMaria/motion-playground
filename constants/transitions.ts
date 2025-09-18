@@ -1,3 +1,5 @@
+import { desc } from "motion/react-client";
+
 export type WhenToUse = {
   title: string;
   description: string;
@@ -18,6 +20,48 @@ export type EaseDef = {
   function: string;
   content: string;
 };
+type T_OVERVIEW = {
+  title: string;
+  link: string;
+};
+
+export const TRANSITION_OVERVIEW = [
+  {
+    title: "Transition Types",
+    link: "#transition-types",
+    description: "The main kinds of transitions Motion supports and how they differ.",
+  },
+  {
+    title: "Tween Transitions",
+    link: "#tween",
+    description: "What tweens are, their core props, when to use them—and when not to.",
+  },
+  {
+    title: "Spring Transitions",
+    link: "#spring",
+    description: "How springs work, their properties, and when physics feels better than timing.",
+  },
+  {
+    title: "Transform Origin",
+    link: "#transform-origin",
+    description: "Control the pivot point for scale, rotate, and 3D effects.",
+  },
+  {
+    title: "Per-Value Overrides",
+    link: "#per-value-overrides",
+    description: "Mix transition types per property for more natural, layered motion.",
+  },
+  {
+    title: "Keyframes",
+    link: "#keyframes",
+    description: "Stage animations in multiple steps to add life and complexity.",
+  },
+  {
+    title: "MotionConfig",
+    link: "#motion-config",
+    description: "Set global defaults and reduced-motion rules across a subtree.",
+  },
+] as const;
 
 const EASE_SOUL_OF_TWEEN = [
   { function: "linear", content: "steady, constant speed. Robotic, great for loaders." },
