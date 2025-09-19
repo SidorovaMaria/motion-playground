@@ -15,7 +15,7 @@ import { motion, MotionConfig } from "motion/react";
 import Link from "next/link";
 import { ArrowUpRightFromSquare, CheckCircle2, XCircle } from "lucide-react";
 import PropsListItem from "@/components/cards_tags/PropsListItem";
-import { Links } from "@/utils/links";
+import { Links } from "@/constants/links";
 
 import {
   EASE_SOUL_OF_TWEEN,

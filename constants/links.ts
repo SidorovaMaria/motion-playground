@@ -1,6 +1,6 @@
 export const Links = {
   animation: {
-    transitionProperties: "/animation/transition-properties",
+    transitionProperties: "/animation/transitions-properties",
     motionTransition: "/animation/transitions",
     default: "/animation",
   },

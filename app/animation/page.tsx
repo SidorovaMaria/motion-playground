@@ -2,7 +2,7 @@
 import CodeAndExample from "@/components/codeExamples/CodeAndExample";
 import CodeHighliter from "@/components/codeExamples/CodeHighliter";
 import MotionExample from "@/components/codeExamples/MotionExample";
-import { Links } from "@/utils/links";
+import { Links } from "@/constants/links";
 import { revealSpanVariant } from "@/variants/buttonVariants";
 import { motion } from "framer-motion";
 import { ArrowRight, Code } from "lucide-react";

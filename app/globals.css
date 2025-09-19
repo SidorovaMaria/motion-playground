@@ -86,7 +86,7 @@ html {
   .paragraph {
     @apply text-foreground/80 text-base font-medium tracking-wide;
     code {
-      @apply text-xs code p-0 pr-1;
+      @apply text-xs code pl-0! pr-1;
     }
   }
   .example-paragraph {
@@ -158,10 +158,10 @@ html {
   }
   code.code,
   code.code-a {
-    @apply inline-flex bg-background-muted p-1 mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
+    @apply inline-flex bg-background-muted  mx-1 text-center rounded-lg overflow-x-auto text-sm text-primary/90 font-mono font-semibold;
   }
   code.code-a {
-    @apply text-secondary! not-italic p-0;
+    @apply text-secondary! not-italic p-0!;
   }
 
   /* Page Styles */
