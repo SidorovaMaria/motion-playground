@@ -10,14 +10,13 @@
  */
 
 import dynamic from "next/dynamic";
-import React, { useRef } from "react";
-import { motion, MotionConfig, Transition, useInView, useReducedMotion } from "motion/react";
+import React from "react";
+import { motion, MotionConfig } from "motion/react";
 import Link from "next/link";
-import { ArrowUpRightFromSquare, CheckCircle2, ChevronDown, Loader, XCircle } from "lucide-react";
+import { ArrowUpRightFromSquare, CheckCircle2, XCircle } from "lucide-react";
 import PropsListItem from "@/components/cards_tags/PropsListItem";
 import { Links } from "@/utils/links";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { usePersistentBoolean } from "@/utils/usePersistentBoolean";
+
 import {
   EASE_SOUL_OF_TWEEN,
   KEYFRAME_DANGER,
@@ -39,6 +38,9 @@ import {
   WHEN_TRANSFORM_ORIGIN,
 } from "@/constants/transitions";
 import { codeFromBackticks } from "@/utils/textFormat";
+import LazyMount from "@/utils/LazyMount";
+import InViewSection from "@/components/pageFormat/InViewSection";
+import InViewArticle from "@/components/pageFormat/InViewArticle";
 
 //Lazy loading for extra components
 const CodeHighliter = dynamic(() => import("@/components/codeExamples/CodeHighliter"), {
@@ -998,152 +1000,3 @@ const Transitions = () => {
 };
 
 export default Transitions;
-
-const LazyMount = ({
-  children,
-  className,
-  block,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  block?: "code" | null;
-}) => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true });
-  return (
-    <section ref={ref} className={` ${className} ${block === "code" && "code-block"}`}>
-      {inView ? (
-        children
-      ) : (
-        <div className="flex w-full items-center justify-center h-24">
-          <Loader className="animate-spin" aria-hidden />
-          <span className="sr-only">Loading block…</span>
-        </div>
-      )}
-    </section>
-  );
-};
-const InViewSection = ({
-  title,
-  children,
-  defaultOpen = false,
-  id,
-  className,
-  ...props
-}: {
-  title: string;
-
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-  id: string;
-  className?: string;
-}) => {
-  // Reduced-motion: disable entrance motion; keep state transitions instant.
-  const prefersReduced = useReducedMotion();
-  const baseTransition = prefersReduced
-    ? { duration: 0 }
-    : ({ type: "tween" as const, duration: 0.5, ease: ["easeInOut"] } as Transition);
-  const pathname = usePathname(); // make the key per-page
-  // Persist open/closed state per-page; safe for route changes.
-  const storageKey = `mp:section:${pathname}:${id}`;
-  const [open, setOpen] = usePersistentBoolean(storageKey, defaultOpen);
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  return (
-    <motion.section
-      id={id}
-      role="region"
-      initial={prefersReduced ? { opacity: 0, y: 0 } : { opacity: 0, y: -25 }}
-      whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
-      transition={{ type: "spring", stiffness: 50, duration: 0.5 }}
-      className={`mt-12 max-w-4xl mx-auto bg-background-muted  border-l-4 border-accent/70 rounded-lg rounded-l-none ${className}`}
-      {...props}
-    >
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls={`${id}-content`}
-        onClick={() => setOpen((prev) => !prev)}
-        className="group flex w-full items-center justify-between cursor-pointer p-6"
-      >
-        <h2 className="heading">{title}</h2>
-        <motion.span
-          aria-hidden
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={
-            prefersReduced ? { duration: 0 } : { type: "spring", stiffness: 200, damping: 10 }
-          }
-        >
-          <ChevronDown className="w-8 h-8 stroke-4 text-foreground/70 group-hover:text-foreground/100" />
-        </motion.span>
-      </button>
-
-      <motion.div
-        id={`${id}-content`}
-        initial={false}
-        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-        transition={baseTransition}
-        style={{ transformOrigin: "top", willChange: "height, opacity" }}
-        className="overflow-hidden "
-        // onAnimationComplete={() => {
-        //   if (open && ref.current) {
-        //     ref.current.focus({ preventScroll: true });
-        //     ref.current.scrollIntoView({
-        //       behavior: "smooth",
-
-        //       block: "nearest",
-        //     });
-        //   }
-        // }}
-      >
-        <div ref={ref} className="p-6">
-          {children}
-        </div>
-      </motion.div>
-    </motion.section>
-  );
-};
-/**
- * <InViewArticle/>
- * Smaller content unit revealed when scrolled into view.
- * - Same entrance semantics as <InViewSection> for consistency.
- * - Use for conceptual chunks, not interactive state.
- */
-const InViewArticle = ({
-  title,
-  children,
-  id,
-  className,
-  ariaLabelledBy,
-  ...props
-}: {
-  title: string;
-  ariaLabelledBy: string;
-  children: React.ReactNode;
-  id: string;
-  className?: string;
-}) => {
-  // Reduced-motion: disable entrance motion; keep state transitions instant.
-  const prefersReduced = useReducedMotion();
-  return (
-    <motion.article
-      id={id}
-      aria-labelledby={ariaLabelledBy}
-      role="article"
-      initial={prefersReduced ? { opacity: 0, y: 0 } : { opacity: 0, y: -25 }}
-      whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ type: "spring", stiffness: 50, duration: 0.5 }}
-      className={`mt-8 space-y-2 max-w-4xl mx-auto ${className}`}
-      {...props}
-    >
-      <h3 id={ariaLabelledBy} className="heading text-xl mb-4">
-        {title}
-      </h3>
-
-      {children}
-    </motion.article>
-  );
-};

@@ -6,6 +6,7 @@ import {
   RepeatDelayExamples,
   RepeatExamples,
   RepeatTypeExamples,
+  StiffnessExamples,
 } from "@/components/properties/Properties";
 
 import PropertyShowcase from "@/components/properties/PropertyShowcase";
@@ -23,6 +24,12 @@ const TransitionProperties = () => {
           Framer Motion. Here we explore all of them with tiny exmaples to understand how they work.
         </p>
       </header>
+      {/**
+       * DURATION
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="duration"
         title="Duration"
@@ -62,7 +69,12 @@ const TransitionProperties = () => {
         ]}
         examples={<DurationExamples />}
       />
-
+      {/**
+       * EASE
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="ease"
         title="Ease"
@@ -113,6 +125,12 @@ const TransitionProperties = () => {
         ]}
         examples={<EaseExamples />}
       />
+      {/**
+       * DELAY
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="delay"
         title="Delay"
@@ -145,7 +163,7 @@ const TransitionProperties = () => {
             content: <>Delay &gt; 0 waits; Delay &lt; 0 seeks into the animation.</>,
           },
           {
-            label: "Gotchas",
+            label: "Traps",
             content: (
               <>
                 If <code className="code-a">abs(delay) ≥ duration</code> and no repeat, it ends
@@ -157,6 +175,12 @@ const TransitionProperties = () => {
         ]}
         examples={<DelayExamples />}
       />
+      {/**
+       * REPEAT
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="repeat"
         title="Repeat"
@@ -204,7 +228,7 @@ const TransitionProperties = () => {
             ),
           },
           {
-            label: "Gotchas",
+            label: "Traps",
             content: (
               <>
                 Repeat counts exclude the first run.
@@ -217,6 +241,12 @@ const TransitionProperties = () => {
         ]}
         examples={<RepeatExamples />}
       />
+      {/**
+       * REPEAT TYPE
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="repeatType"
         title="Repeat Type"
@@ -266,7 +296,7 @@ const TransitionProperties = () => {
           },
 
           {
-            label: "Gotchas",
+            label: "Traps",
             content: (
               <>
                 Needs repeat to do anything. Not all transitions support it equally, since spring
@@ -277,6 +307,12 @@ const TransitionProperties = () => {
         ]}
         examples={<RepeatTypeExamples />}
       />
+      {/**
+       * REPEAT DELAY
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
       <TransitionPropertySection
         id="repeatDelay"
         title="Repeat Delay"
@@ -307,7 +343,7 @@ const TransitionProperties = () => {
           },
 
           {
-            label: "Gotchas",
+            label: "Traps",
             content: (
               <>
                 Doesn&apos;t affect the first playthrough, only repeats. Works only with
@@ -320,6 +356,69 @@ const TransitionProperties = () => {
           },
         ]}
         examples={<RepeatDelayExamples />}
+      />
+      {/**
+       * STIFFNESS
+       * Overview of the property
+       * Code snippet
+       * Examples
+       */}
+      <TransitionPropertySection
+        id="stiffness"
+        examples={<StiffnessExamples />}
+        title="Stiffness"
+        snippet="<motion.div
+  animate={{ x: 100 }}
+  transition={{ type: 'spring', stiffness: 200 }}
+/>"
+        description={
+          <>
+            It defines how strong the spring’s restoring force is. A higher value means the spring
+            yanks the animated value back faster and with more force, creating a tighter, snappier
+            feel. A lower value means the spring is looser, slower to settle, and feels “heavier.”
+          </>
+        }
+        overview={[
+          {
+            label: "What",
+            content: <>Strength of the spring’s pull toward the target.</>,
+          },
+          {
+            label: "Default",
+            content: (
+              <>
+                <code className="code-a">100</code>
+              </>
+            ),
+          },
+          {
+            label: "Options",
+            content: (
+              <>
+                Any positive number (commonly <code className="code-a">50–500</code>)
+              </>
+            ),
+          },
+          {
+            label: "Effect",
+            content: (
+              <>
+                Larger &#10142; snappier, bouncier, settles quickly. | Smaller &#10142; looser,
+                floatier, takes longer to reach target.
+              </>
+            ),
+          },
+
+          {
+            label: "Traps",
+            content: (
+              <>
+                Works only in physics-mode springs. If you switch to a duration-based spring,
+                stiffness is ignored.
+              </>
+            ),
+          },
+        ]}
       />
     </main>
   );

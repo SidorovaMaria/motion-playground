@@ -12,10 +12,10 @@ type PropertyShowcaseProps = {
 const PropertyShowcase = ({ id, examples, defaultOpen }: PropertyShowcaseProps) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <aside id={id} className="my-2">
+    <aside id={id} className="p-2 w-full">
       <button
         type="button"
-        className="flex items-center rounded-2xl justify-center gap-4 p-2 cursor-pointer"
+        className="flex items-center justify-between my-3 p-4 cursor-pointer w-full rounded-md"
         aria-expanded={open}
         title={`show-${id}`}
         aria-controls={`${id}-panel`}

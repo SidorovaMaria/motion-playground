@@ -502,3 +502,44 @@ export function RepeatDelayExamples() {
     </div>
   );
 }
+
+export function StiffnessExamples() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Stiffness 50 */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{ x: 100 }}
+  transition={{ type: "spring", stiffness: 50, damping: 10 }}
+/>`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ x: 0 }}
+          animate={{ x: 100 }}
+          transition={{ type: "spring", stiffness: 50, damping: 10 }}
+        />
+        <p className="example-paragraph">
+          <code>stiffness: 50</code> makes for a soft, gentle spring. The box moves slowly toward
+          its target with a lot of bounce and overshoot before settling.
+        </p>
+      </div>
+      {/* Stiffness 200 */}
+      <div className="grid sm:grid-cols-[2fr_1fr] md:grid-cols-1">
+        <CodeHighliter>{`<motion.div
+  animate={{ x: 100 }}
+  transition={{ type: "spring", stiffness: 200, damping: 10 }}
+/>`}</CodeHighliter>
+        <MotionExample
+          size="small"
+          initial={{ x: 0 }}
+          animate={{ x: 100 }}
+          transition={{ type: "spring", stiffness: 200, damping: 10 }}
+        />
+        <p className="example-paragraph">
+          <code>stiffness: 200</code> creates a firmer spring. The box moves more quickly toward its
+          target with less bounce and overshoot before settling.
+        </p>
+      </div>
+    </div>
+  );
+}
