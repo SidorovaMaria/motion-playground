@@ -29,7 +29,7 @@ const MotionExample = ({
   const [useAnimate, setUseAnimate] = React.useState(false);
   return (
     <div
-      className={`flex items-center justify-center w-64  rounded-lg ${className} ${
+      className={`flex items-center justify-center w-64 rounded-lg ${className} ${
         size && size === "small" && "w-auto!"
       }`}
     >

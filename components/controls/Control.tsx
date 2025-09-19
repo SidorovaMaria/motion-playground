@@ -1,4 +1,4 @@
-import { INITIAL_STATE, TransformState } from "@/app/animation/playground/page";
+import { INITIAL_STATE, TransformState } from "@/app/animate-transition/playground/page";
 import { ControlsExplain } from "@/utils/utils";
 import { revealToBottom } from "@/variants/TextVariants";
 import { Info } from "lucide-react";

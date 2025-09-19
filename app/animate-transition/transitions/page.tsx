@@ -222,7 +222,7 @@ const Transitions = () => {
               {TWEEN_PROPERTIES.map(({ property, link, description }) => (
                 <PropsListItem
                   key={property}
-                  href={`${Links.animation.transitionProperties}${link}`}
+                  href={`${Links["animate-transition"].transitionProperties}${link}`}
                   title={property}
                   description={description}
                 />
@@ -412,7 +412,7 @@ const Transitions = () => {
               {SPRING_PROPERTIES.map(({ property, link, description }) => (
                 <PropsListItem
                   key={property}
-                  href={`${Links.animation.transitionProperties}${link}`}
+                  href={`${Links["animate-transition"].transitionProperties}${link}`}
                   title={property}
                   description={description}
                 />
@@ -885,7 +885,7 @@ const Transitions = () => {
                   key={item.property}
                   href={
                     "link" in item && item.link
-                      ? `${Links.animation.motionTransition}${item.link}`
+                      ? `${Links["animate-transition"].motionTransition}${item.link}`
                       : undefined
                   }
                   title={item.property}

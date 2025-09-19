@@ -4,10 +4,11 @@ import CodeHighliter from "@/components/codeExamples/CodeHighliter";
 import MotionExample from "@/components/codeExamples/MotionExample";
 import { Links } from "@/constants/links";
 import { revealSpanVariant } from "@/variants/buttonVariants";
-import { motion } from "framer-motion";
-import { ArrowRight, Code } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowRight, Codepen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import LazyMount from "@/utils/LazyMount";
 
 const AnimationPage = () => {
   const router = useRouter();
@@ -54,14 +55,17 @@ const AnimationPage = () => {
           </ul>
         </div>
       </section>
-      {/* Meet the Motion component  */}
+      {/* Meet the Motion component  Basic */}
       <section aria-label="Meet the Motion component" className="mt-12 max-w-4xl mx-auto">
         <h2 className="heading mb-4">Meet the Motion component</h2>
         <p className="paragraph text-left max-w-3xl">
           The <code className="code text-xs">{`<motion />`}</code> component is an enhanced version
           of every HTML and SVG element, giving them powerful animation capabilities. You can use a
           variety of{" "}
-          <a href="./animation-props" className="text-primary/90 font-semibold hover:underline">
+          <a
+            href={Links["animate-transition"].transitionProperties}
+            className="text-primary/90 font-semibold hover:underline"
+          >
             animation props{" "}
           </a>
           provided by the library by simply replacing a standard HTML element with its motion
@@ -85,14 +89,16 @@ const AnimationPage = () => {
         </p>
         <div className="flex gap-7 items-center justify-center mt-4">
           <div className="w-full ">
-            <CodeHighliter>
-              {`<motion.div 
+            <LazyMount>
+              <CodeHighliter>
+                {`<motion.div 
   animate={{ borderRadius: '100%' }} 
   transition={{ duration: 2 }} 
 /> 
 // animates to border-radius: "100%" in 2 seconds 
 // <- refresh browser to see the effect`}
-            </CodeHighliter>
+              </CodeHighliter>
+            </LazyMount>
           </div>
           <motion.div
             animate={{ borderRadius: "100%" }}
@@ -121,31 +127,18 @@ const AnimationPage = () => {
               aria-label="Transforms list"
               className="list-disc list-inside space-y-2 mt-4 text-base text-foreground [&>li]:text-sm font-display"
             >
-              <li className="">
-                Move: <code className="code">x, y, z</code>
-              </li>
-              <li>
-                Scale: <code className="code">scale, scaleX, scaleY</code>
-              </li>
-              <li>
-                Rotate: <code className="code">rotate, rotateX, rotateY, rotateZ</code>
-              </li>
-              <li>
-                Skew: <code className="code">skew, skewX, skewY</code>
-              </li>
-              <li>
-                Origin: <code className="code">originX, originY, originZ</code>
-              </li>
-              <li>
-                Depth: <code className="code">transformPerspective</code>
-              </li>
+              {transformProperties.map(({ label, codes }) => (
+                <li key={label}>
+                  {label}: <code className="code">{codes.join(", ")}</code>
+                </li>
+              ))}
             </ul>
             <motion.button
               initial="rest"
               whileHover="hovered"
               whileFocus="hovered"
               animate="rest"
-              onClick={() => router.push("/animation/playground")}
+              onClick={() => router.push(Links["animate-transition"].playground)}
               className="primary-button flex items-center text-sm py-1 px-3! mt-4"
             >
               <p>Explore Playground to learn more</p>
@@ -165,25 +158,13 @@ const AnimationPage = () => {
               aria-label="CSS list"
               className="list-disc list-inside space-y-2 my-4 text-base text-foreground [&>li]:text-sm font-display"
             >
-              <li className="">
-                Opacity: <code className="code">opacity</code>
-              </li>
-              <li>
-                Color: <code className="code">color, borderColor</code>
-              </li>
-              <li>
-                Corners: <code className="code">borderRadius</code>
-              </li>
-              <li>
-                Shadows: <code className="code">boxShadow, textShadow</code>
-              </li>
-              <li>
-                Background Color: <code className="code">background-color</code>
-              </li>
-              <li>
-                Filters: <code className="code">blur, brightness, contrast</code>
-              </li>
+              {CSSProperties.map(({ label, codes }) => (
+                <li key={label}>
+                  {label}: <code className="code">{codes.join(", ")}</code>
+                </li>
+              ))}
             </ul>
+
             <p className="paragraph text-left">And many more...</p>
           </div>
         </div>
@@ -202,32 +183,11 @@ const AnimationPage = () => {
           aria-label="Transforms list"
           className="list-disc list-inside space-y-2 mt-4 text-base text-foreground [&>li]:text-sm font-display"
         >
-          <li className="">
-            Numbers: <code className="code">0, 1, 100, etc</code>
-          </li>
-          <li>
-            String containing numbers: <code className="code">{`"0vh", "55px", "15%", etc`}</code>
-          </li>
-          <li>
-            Colors:{" "}
-            <code className="code">
-              HEX {`-> "#fff" `}, RGBA {`-> "rgba(255, 255, 255, 1)" `}, HSLA
-              {`-> "hsla(0, 0%, 100%, 1)" `},
-            </code>
-          </li>
-          <li>
-            Complex Strings like box-shadow:{" "}
-            <code className="code">{`"0 4px 8px rgba(0, 0, 0, 0.1)"`}</code>
-          </li>
-          <li>
-            Visibility: <code className="code">{`"hidden" / "visible"`}</code>
-          </li>
-          <li>
-            Display: <code className="code">{`"none" / "block"`}</code>
-          </li>
-          <li>
-            Width/Height: <code className="code">{`"auto" / "block"`}</code>
-          </li>
+          {AnimatableValues.map(({ label, codes }) => (
+            <li key={label}>
+              {label}: <code className="code">{codes.join(", ")}</code>
+            </li>
+          ))}
         </ul>
       </section>
       {/* Motion Transition */}
@@ -255,32 +215,31 @@ const AnimationPage = () => {
             </p>
             <div className="">
               <h5 className="aside-title text-base mt-4 mb-2">Animation Props available:</h5>
-              <ul className="list-disc list-inside space-y-2 mt-4 mb-2 text-base text-foreground [&>li]:text-sm font-display">
-                <li>
-                  Type -<CodeHighliter inline>{`"spring", "tween"`}</CodeHighliter>
-                </li>
-                <li>Timing/Phyics</li>
-                <ul className="list-disc list-inside ml-4 text-sm space-y-2">
-                  <li>
-                    Tween <CodeHighliter inline>{`"duration", "delay", "ease"`}</CodeHighliter>
-                  </li>
-                  <li>
-                    Spring{" "}
-                    <CodeHighliter
-                      inline
-                    >{`"stiffness", "damping", "mass", "bounce"`}</CodeHighliter>
-                  </li>
-                </ul>
-                <li>
-                  Repeat Controls
-                  <CodeHighliter inline>{`"repeat", "repeatType", "repeatDelay"`}</CodeHighliter>
-                </li>
-                <li>
-                  Per-value overrides
-                  <CodeHighliter
-                    inline
-                  >{`transition={{ default: {…}, opacity: {…} }}`}</CodeHighliter>
-                </li>
+              <ul className="list-disc list-inside space-y-2 mt-4 mb-2 text-base text-foreground [&>li]:text-sm font-display paragraph">
+                {AnimationProps.map((item, idx) =>
+                  item.children ? (
+                    <li key={item.label + idx}>
+                      {item.label}
+                      <ul className="list-disc list-inside ml-4 text-sm space-y-2 pt-2">
+                        {item.children.map((child, cidx) => (
+                          <li key={child.label + cidx}>
+                            {child.label} <code>{child.codes.join(", ")}</code>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ) : (
+                    <li key={item.label + idx}>
+                      {item.label}
+                      {item.codes.length > 0 && (
+                        <>
+                          {" "}
+                          <code>{item.codes.join(", ")}</code>
+                        </>
+                      )}
+                    </li>
+                  )
+                )}
               </ul>
               <p className="paragraph text-left max-w-2xl">
                 This is the starter kit, not the whole toolbox. Motion also offers advanced spring
@@ -345,8 +304,8 @@ const AnimationPage = () => {
                 whileHover="hovered"
                 whileFocus="hovered"
                 animate="rest"
-                onClick={() => router.push("/animation/playground")}
-                className="primary-button flex items-center text-base py-2 px-3! mt-4 mx-auto"
+                onClick={() => router.push(Links["animate-transition"].playground)}
+                className="primary-button flex items-center text-base py-2 px-3! my-8 mx-auto"
               >
                 <p>Play around in the playground </p>
                 <motion.span variants={revealSpanVariant} className="text-background bounce-right">
@@ -387,7 +346,7 @@ const AnimationPage = () => {
         whileHover="hovered"
         whileFocus="hovered"
         animate="rest"
-        onClick={() => router.push(Links.animation.motionTransition)}
+        onClick={() => router.push(Links["animate-transition"].motionTransition)}
         className="primary-button flex items-center text-base font-display tracking-wide font-normal p-4! mx-auto w-full max-w-4xl rounded-md mt-12 "
       >
         <p>Deep dive Into the Motion Transition </p>
@@ -400,3 +359,127 @@ const AnimationPage = () => {
 };
 
 export default AnimationPage;
+const transformProperties = [
+  {
+    label: "Move",
+    codes: ["x", "y", "z"],
+  },
+  {
+    label: "Scale",
+    codes: ["scale", "scaleX", "scaleY"],
+  },
+  {
+    label: "Rotate",
+    codes: ["rotate", "rotateX", "rotateY", "rotateZ"],
+  },
+  {
+    label: "Skew",
+    codes: ["skew", "skewX", "skewY"],
+  },
+  {
+    label: "Origin",
+    codes: ["originX", "originY", "originZ"],
+  },
+  {
+    label: "Depth",
+    codes: ["transformPerspective"],
+  },
+];
+const CSSProperties = [
+  {
+    label: "Opacity",
+    codes: ["opacity"],
+  },
+  {
+    label: "Color",
+    codes: ["color", "borderColor"],
+  },
+  {
+    label: "Corners",
+    codes: ["borderRadius"],
+  },
+  {
+    label: "Shadows",
+    codes: ["boxShadow", "textShadow"],
+  },
+  {
+    label: "Background Color",
+    codes: ["background-color"],
+  },
+  {
+    label: "Filters",
+    codes: ["blur", "brightness", "contrast"],
+  },
+];
+const AnimatableValues = [
+  {
+    label: "Numbers",
+    codes: ["0", "1", "100", "etc"],
+    description: "",
+  },
+  {
+    label: "String containing numbers",
+    codes: ['"0vh"', '"55px"', '"15%"', "etc"],
+    description: "",
+  },
+  {
+    label: "Colors",
+    codes: ['HEX -> "#fff"', 'RGBA -> "rgba(255, 255, 255, 1)"', 'HSLA -> "hsla(0, 0%, 100%, 1)"'],
+    description: "",
+  },
+  {
+    label: "Complex Strings like box-shadow",
+    codes: ['"0 4px 8px rgba(0, 0, 0, 0.1)"'],
+    description: "",
+  },
+  {
+    label: "Visibility",
+    codes: ['"hidden"', '"visible"'],
+    description: "",
+  },
+  {
+    label: "Display",
+    codes: ['"none"', '"block"'],
+    description: "",
+  },
+  {
+    label: "Width/Height",
+    codes: ['"auto"', '"block"'],
+    description: "",
+  },
+];
+
+const AnimationProps = [
+  {
+    label: "Type",
+    codes: ['"spring"', '"tween"'],
+    description: "Transition type",
+  },
+  {
+    label: "Timing/Physics",
+    codes: [],
+    description: "",
+    children: [
+      {
+        label: "Tween",
+        codes: ['"duration"', '"delay"', '"ease"'],
+        description: "Tween timing options",
+      },
+      {
+        label: "Spring",
+        codes: ['"stiffness"', '"damping"', '"mass"', '"bounce"'],
+        description: "Spring physics options",
+      },
+    ],
+  },
+  {
+    label: "Repeat Controls",
+    codes: ['"repeat"', '"repeatType"', '"repeatDelay"'],
+    description: "Repeat animation options",
+  },
+  {
+    label: "Per-value overrides",
+    codes: ["transition={{ default: {…}, opacity: {…} }}"],
+    description: "Override transition per property",
+  },
+];

@@ -1,6 +1,7 @@
 "use client";
 import PathCard from "@/components/cards_tags/PathCard";
 import Tag from "@/components/cards_tags/Tag";
+import { Links } from "@/constants/links";
 import { revealSpanVariant, shimmerSpanVariant } from "@/variants/buttonVariants";
 import { revealFromBottom } from "@/variants/TextVariants";
 import {
@@ -166,14 +167,14 @@ export default function Home() {
               icon={Sparkles}
               title="Animate & Transitions"
               description="Start with the fundamentals of animating components and creating smooth transitions."
-              link="/animation"
+              link={Links["animate-transition"].default}
               accentColor="#B20650"
             />
             <PathCard
               icon={MonitorX}
-              title="Animate Presence"
-              description="Learn how to animate components as they mount and unmount in React with AnimatePresence."
-              link="/learn"
+              title="Motion Component"
+              description="Learn how to use the Motion component to create complex animations."
+              link={Links["motion-component"].default}
               accentColor="#2CA060"
             />
             <PathCard
