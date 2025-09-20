@@ -1,3 +1,25 @@
+/**
+ * AnimationPlayground is the main interactive page component for exploring motion transforms and transitions.
+ *
+ * Features:
+ * - Allows users to experiment with various transform properties (translate, scale, rotate, skew, perspective).
+ * - Supports two animation functions: "tween" and "spring", each with their own configurable parameters.
+ * - Provides two modes for setting transform values: "presets" (predefined animations) and "manual" (fine-grained control).
+ * - Uses a reducer to manage transform state, ensuring predictable updates and easy resets.
+ * - Renders a live preview of the animated object using Framer Motion's <motion.div>.
+ * - Includes UI controls for switching between animation functions, adjusting parameters, and applying presets.
+ * - Integrates with Next.js router for navigation.
+ *
+ * Accessibility:
+ * - Uses ARIA attributes for better accessibility.
+ * - Keyboard and screen reader friendly controls.
+ *
+ * Dependencies:
+ * - React, Next.js, Framer Motion, Lucide React icons, and custom utility components.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered animation playground page.
+ */
 "use client";
 
 import Image from "next/image";

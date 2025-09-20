@@ -7,5 +7,6 @@ export const Links = {
   },
   "motion-component": {
     default: "/motion-component",
+    hover_focus: "/motion-component/hover-focus",
   },
 };

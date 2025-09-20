@@ -60,7 +60,7 @@ const InViewArticle = ({
       className={`mt-8 space-y-2 max-w-4xl mx-auto ${className}`}
       {...props}
     >
-      <h3 id={ariaLabelledBy} className="heading text-xl mb-4">
+      <h3 id={ariaLabelledBy} className="heading text-xl ">
         {title}
       </h3>
 

@@ -196,9 +196,9 @@ html {
     @apply list-disc space-y-2 list-inside  py-2 w-full  [&>li>span]:font-display [&>li>span]:text-sm [&>li>span]:text-foreground;
   }
   .props {
-    @apply font-bold tracking-[0.015rem] italic text-primary;
+    @apply font-semibold tracking-[0.015rem] italic text-foreground/80;
     span {
-      @apply font-display text-foreground not-italic;
+      @apply font-display text-foreground/90! not-italic;
     }
   }
   .danger-list {

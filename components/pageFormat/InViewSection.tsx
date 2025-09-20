@@ -45,6 +45,7 @@ const InViewSection = ({
   defaultOpen = false,
   id,
   className,
+  contentClassName,
   ...props
 }: {
   title: string;
@@ -53,6 +54,7 @@ const InViewSection = ({
   defaultOpen?: boolean;
   id: string;
   className?: string;
+  contentClassName?: string;
 }) => {
   // Reduced-motion: disable entrance motion; keep state transitions instant.
   const prefersReduced = useReducedMotion();
@@ -65,6 +67,7 @@ const InViewSection = ({
   const [open, setOpen] = usePersistentBoolean(storageKey, defaultOpen);
 
   const ref = useRef<HTMLDivElement>(null);
+  console.log("InViewSection render", id, open);
 
   return (
     <motion.section
@@ -72,7 +75,6 @@ const InViewSection = ({
       role="region"
       initial={prefersReduced ? { opacity: 0, y: 0 } : { opacity: 0, y: -25 }}
       whileInView={prefersReduced ? {} : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
       transition={{ type: "spring", stiffness: 50, duration: 0.5 }}
       className={`mt-12 max-w-4xl mx-auto bg-background-muted  border-l-4 border-accent/70 rounded-lg rounded-l-none ${className}`}
       {...props}
@@ -114,7 +116,7 @@ const InViewSection = ({
         //   }
         // }}
       >
-        <div ref={ref} className="p-6">
+        <div ref={ref} className={`p-6 ${contentClassName}`}>
           {children}
         </div>
       </motion.div>
