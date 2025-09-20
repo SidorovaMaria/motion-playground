@@ -1,11 +1,11 @@
 "use client";
 import CodeAndExample from "@/components/codeExamples/CodeAndExample";
 import CodeHighliter from "@/components/codeExamples/CodeHighliter";
-import MotionExample from "@/components/codeExamples/MotionExample";
+
 import { Links } from "@/constants/links";
 import { revealSpanVariant } from "@/variants/buttonVariants";
 import { motion } from "motion/react";
-import { ArrowRight, Codepen } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import LazyMount from "@/utils/LazyMount";

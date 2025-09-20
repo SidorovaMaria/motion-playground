@@ -207,6 +207,9 @@ html {
           [&>li]:border-b [&>li]:border-foreground/10 [&>li]:pb-1
           [&>li>ul]:list-disc [&>li>ul]:list-inside [&>li>ul]:mt-1 [&>li>ul]:ml-2 [&>li>ul]:space-y-1 [&>li>ul]:u-paragraph [&>li>ul]:text-sm;
   }
+  .example-box {
+    @apply w-20 h-20 bg-gradient-to-br from-secondary to-primary flex items-center justify-center rounded-md text-xs font-display cursor-pointer;
+  }
 }
 
 /*  === ANIMATION === */

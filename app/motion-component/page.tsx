@@ -331,7 +331,7 @@ const MotionComponentPage = () => {
         onClick={() => router.push(Links["motion-component"].hover_focus)}
         className="primary-button flex items-center text-base font-display tracking-wide font-normal p-4! mx-auto w-full max-w-4xl rounded-md mt-12 capitalize"
       >
-        <p>Learn Focus And Hover props for motion component </p>
+        <p>Explore Motion’s Interactive Features </p>
         <motion.span variants={revealSpanVariant} className="text-background bounce-right ml-auto">
           <ArrowRight className="" />
         </motion.span>

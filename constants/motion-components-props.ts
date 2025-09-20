@@ -670,3 +670,363 @@ export const onAnimationCompleteMProp: MotionProp = {
     },
   ],
 };
+
+export const whileHoverMProp: MotionProp = {
+  id: "whileHover-overview",
+  title: "whileHover",
+  snippet: `<motion.div 
+  whileHover={{ scale: 1.1, rotate: 10 }}
+>
+  Hover me
+</motion.div>`,
+  coreProps: [
+    {
+      label: "Values",
+      contentArray: [
+        {
+          label: "Animatable properties",
+          content: "numbers, transforms, colors, opacity, shadows, etc.",
+        },
+        {
+          label: "Variants",
+          content: "you can pass a variant key string instead of raw values.",
+        },
+      ],
+    },
+    {
+      label: "Scope",
+      content:
+        "Applies only while the pointer is over the element. Once hover ends, Motion animates back to the previous state.",
+    },
+    {
+      label: "Timing",
+      content: "Triggers immediately on hover-in and reverts smoothly on hover-out.",
+    },
+    {
+      label: "Signature",
+      content: "`whileHover={{ ...properties }}`",
+    },
+  ],
+  whyMatters: [
+    {
+      label: "Interactive feedback",
+      content: "Reinforces that an element is clickable or interactive, guiding the user.",
+    },
+    {
+      label: "Micro-interactions",
+      content: "Turns static UI into tactile, responsive components.",
+    },
+    {
+      label: "Accessibility",
+      content: "Pairs well with `whileFocus` for keyboard users, ensuring consistent feedback.",
+    },
+  ],
+  when: [
+    {
+      label: "Buttons & links",
+      content: "Make them feel more clickable with subtle scaling or color shifts.",
+    },
+    {
+      label: "Cards or tiles",
+      content: "Highlight hovered content for discoverability.",
+    },
+    {
+      label: "Icons",
+      content: "Add playful motion (like bounce or rotate) when hovered.",
+    },
+  ],
+  tips_and_notes: [
+    {
+      label: "Keep it subtle",
+      content: "Overly large hover animations can feel distracting — small changes go a long way.",
+    },
+    {
+      label: "Accessible pairing",
+      content: "Always mirror hover effects with `whileFocus` so keyboard users aren’t left out.",
+    },
+    {
+      label: "Reverts automatically",
+      content:
+        "You don’t need to define an explicit 'rest' state — Motion animates back once hover ends.",
+    },
+  ],
+};
+export const onHoverMProp: MotionProp = {
+  id: "onHover-overview",
+  title: "onHoverStart / onHoverEnd",
+  snippet: `<motion.div
+  whileHover={{ scale: 1.1, rotate: 10 }}
+  onHoverStart={() => console.log("Hover began")}
+  onHoverEnd={() => console.log("Hover ended")}
+/>`,
+  coreProps: [
+    {
+      label: "Trigger",
+      content:
+        "`onHoverStart` Callback function that fires when a pointer starts hovering over the component.",
+    },
+    {
+      label: "Release",
+      content:
+        "`onHoverEnd` Callback function that fires when a pointer stops hovering over the component.",
+    },
+    {
+      label: "Signature",
+      content: "`(event: MouseEvent, info: EventInfo) => void`",
+    },
+    {
+      label: "Scope",
+      content:
+        "Only triggers when the element is interactable (not disabled, pointer-events enabled).",
+    },
+  ],
+  whyMatters: [
+    {
+      label: "Extra logic on hover",
+      content:
+        "Lets you trigger side effects (analytics, sounds, tooltips) right as hover begins/ends.",
+    },
+    {
+      label: "Separation of concerns",
+      content:
+        "`whileHover` handles the visual animation, while callbacks handle logic — keeping clean separation.",
+    },
+    {
+      label: "Fine-grained control",
+      content:
+        "You can delay, count, or react differently on hover start vs. hover end, beyond what `whileHover` alone provides.",
+    },
+  ],
+  when: [
+    {
+      label: "Interactive UI",
+      content:
+        "When you want hover to affect more than just styling — e.g., counters, analytics, sidebars.",
+    },
+    {
+      label: "Tooltips & helpers",
+      content: "Show/hide tooltips, previews, or context menus exactly on hover start/end.",
+    },
+    {
+      label: "Game-like feedback",
+      content: "For hover-driven experiences (e.g., charging a bar while hovering).",
+    },
+  ],
+  tips_and_notes: [
+    {
+      label: "Don’t overuse",
+      content:
+        "Not every hover needs callbacks; use them for logic, not simple styling (leave visuals to `whileHover`).",
+    },
+    {
+      label: "Combine smartly",
+      content:
+        "Pair with `whileHover` to keep visuals separate from logic. This makes your code easier to maintain.",
+    },
+    {
+      label: "Clean up side effects",
+      content:
+        "If you start timers/intervals in `onHoverStart`, always clear them in `onHoverEnd` to avoid leaks.",
+    },
+    {
+      label: "Event info",
+      content:
+        "The second argument gives useful pointer info (like position/velocity) if you need advanced interactions.",
+    },
+    {
+      label: "Accessibility",
+      content:
+        "Hover doesn’t exist for keyboard/touch users; make sure critical logic isn’t hover-only.",
+    },
+  ],
+};
+export const whileTapMProp: MotionProp = {
+  id: "whileTap-overview",
+  title: "whileTap",
+  snippet: `<motion.button
+  whileTap={{ scale: 0.96, opacity: 0.95, y: 1 }}
+>
+  Press me
+</motion.button>`,
+  coreProps: [
+    {
+      label: "Values",
+      contentArray: [
+        {
+          label: "Animatable properties",
+          content: "numbers, transforms, colors, opacity, shadows, etc.",
+        },
+        {
+          label: "Variants",
+          content: "you can pass a variant key string instead of raw values.",
+        },
+      ],
+    },
+    {
+      label: "Scope",
+      content:
+        "Affects just this component’s animated style during the press. Reverts instantly on release/cancel.",
+    },
+    {
+      label: "Timing",
+      content:
+        "Activates on pointer/touch down; deactivates on up/cancel. Motion handles the enter/exit transition.",
+    },
+    {
+      label: "Works with",
+      content:
+        "`onTapStart`, `onTap`, `onTapCancel` for logic; `transition` to fine-tune feel (e.g., shorter duration).",
+    },
+  ],
+  whyMatters: [
+    {
+      label: "Tactile feedback",
+      content: "Communicates ‘press’ state clearly on both desktop and touch devices.",
+    },
+    {
+      label: "Polished UX",
+      content: "Press states that spring in and out feel more responsive than static CSS :active.",
+    },
+    {
+      label: "Separation of concerns",
+      content: "Keep visuals in `whileTap`, keep actions in `onTap` (or native button behaviors).",
+    },
+  ],
+  when: [
+    {
+      label: "Buttons & CTAs",
+      content: "Provide a pressed feel (slight scale down, darker tint).",
+    },
+    {
+      label: "Cards & list items",
+      content: "Make tap targets feel alive without committing navigation yet.",
+    },
+    {
+      label: "Mobile-first UIs",
+      content: "Gives immediate visual confirmation of touch interaction.",
+    },
+  ],
+  tips_and_notes: [
+    {
+      label: "Prefer transform properties",
+      content: "Use `scale`, `y`, or `brightness()` for smooth, GPU-friendly feedback.",
+    },
+    {
+      label: "Mind accessibility",
+      content:
+        "Use semantic elements (`<button>`, `<a>`) so keyboard users still get native focus/activation. `whileTap` doesn’t run for keyboard by itself.",
+    },
+    {
+      label: "Keep it subtle",
+      content:
+        "Tiny scale (0.96–0.98) or 1–2px `y` shift usually feels best; big changes can look jittery.",
+    },
+    {
+      label: "Coordinate with haptics",
+      content:
+        "If you use haptics/analytics, trigger them in `onTapStart`/`onTap`, not in `whileTap`.",
+    },
+    {
+      label: "Avoid double handlers",
+      content:
+        "If you also handle `onClick`, ensure you don’t fire actions twice. Prefer `onTap` as the single activation source.",
+    },
+  ],
+};
+export const onTapMProp: MotionProp = {
+  id: "onTap-overview",
+  title: "onTap / onTapStart / onTapCancel",
+  snippet: `<motion.button
+  whileTap={{ scale: 0.96, opacity: 0.95, y: 1 }}
+  onTap={() => console.log("Button tapped")}
+  onTapStart={() => console.log("Tap started")}
+  onTapCancel={() => console.log("Tap cancelled")}
+/>`,
+  coreProps: [
+    {
+      label: "Triggers",
+      content:
+        "`onTap` Callback function that fires when a tap/click is completed (pointer down + up within the element).",
+    },
+    {
+      label: "Start",
+      content:
+        "`onTapStart` Callback function that fires immediately when a pointer goes down on the element.",
+    },
+    {
+      label: "Cancel",
+      content:
+        "`onTapCancel` Callback function that fires if the pointer goes down but then moves away or is released outside the element.",
+    },
+    {
+      label: "Signature",
+      content: "`(event: MouseEvent | TouchEvent, info: EventInfo) => void`",
+    },
+    {
+      label: "Scope",
+      content:
+        "Only triggers when the element is interactable (not disabled, pointer-events enabled).",
+    },
+  ],
+  whyMatters: [
+    {
+      label: "Custom actions",
+      content:
+        "Lets you define exactly what happens on tap without relying solely on native click behavior.",
+    },
+    {
+      label: "Fine-grained control",
+      content:
+        "Separate logic for tap start, completion, and cancellation allows nuanced interactions (e.g., loading states, analytics).",
+    },
+    {
+      label: "Separation of concerns",
+      content:
+        "Keep visual feedback in `whileTap`, and action logic in these callbacks for cleaner code.",
+    },
+  ],
+  when: [
+    {
+      label: "Buttons & interactive elements",
+      content:
+        "When you need to handle taps/clicks with custom logic (e.g., forms, modals, navigation).",
+    },
+    {
+      label: "Game-like interactions",
+      content:
+        "When tap start vs. completion should trigger different effects (e.g., charging, aiming).",
+    },
+    {
+      label: "Analytics & tracking",
+      content:
+        "Log user interactions precisely, distinguishing between starts, completions, and cancellations.",
+    },
+  ],
+  tips_and_notes: [
+    {
+      label: "Use semantic elements",
+      content:
+        "Prefer `<button>`, `<a>`, or other native interactive elements to ensure keyboard accessibility. `onTap` doesn’t handle keyboard by itself.",
+    },
+    {
+      label: "Avoid double handlers",
+      content:
+        "If you also handle `onClick`, ensure you don’t fire actions twice. Prefer `onTap` as the single activation source.",
+    },
+    {
+      label: "Event info",
+      content:
+        "The second argument provides useful pointer info (like position/velocity) if you need advanced interactions.",
+    },
+    {
+      label: "Coordinate with whileTap",
+      content:
+        "Use `whileTap` for visual feedback, and these callbacks for logic — keeping a clean separation of concerns.",
+    },
+    {
+      label: "Cleanup in onTapCancel",
+      content:
+        "If you start timers/intervals in `onTapStart`, always clear them in `onTapCancel` to avoid leaks.",
+    },
+  ],
+};

@@ -67,7 +67,6 @@ const InViewSection = ({
   const [open, setOpen] = usePersistentBoolean(storageKey, defaultOpen);
 
   const ref = useRef<HTMLDivElement>(null);
-  console.log("InViewSection render", id, open);
 
   return (
     <motion.section
